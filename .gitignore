@@ -167,4 +167,5 @@ augmented_data/
 logs/
 output/
 eval_results/
+eval_ews/
 best_model.pth
