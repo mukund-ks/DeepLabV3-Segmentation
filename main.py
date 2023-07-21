@@ -78,7 +78,7 @@ def main(
     See: https://github.com/mukund-ks/DeepLabV3-Segmentation
     """
     try:
-        click.echo(f"Data Pre-Processing Phase\n{'-'*10}")
+        click.echo(f"\nData Pre-Processing Phase\n{'-'*10}")
         processData(data_dir=data_dir, augmentation=augmentation, split_data=split_data)
         click.echo(f"\nTraining Phase\n{'-'*10}")
         trainer(

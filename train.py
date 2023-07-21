@@ -21,7 +21,7 @@ from typing import Any
 
 H = 256
 W = 256
-LR = 1e-4
+LR = 1e-3
 
 
 def read_image(path: Any) -> Any:
@@ -96,7 +96,7 @@ def trainer(
 
     callbacks = [
         ModelCheckpoint(model_path, verbose=1, save_best_only=True),
-        ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=5, min_lr=1e-7, verbose=1),
+        ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=5, min_lr=1e-8, verbose=1),
         CSVLogger(csv_path),
         TensorBoard(),
     ]
@@ -105,6 +105,8 @@ def trainer(
         callbacks.append(
             EarlyStopping(monitor="val_loss", patience=20, restore_best_weights=False),
         )
+        
+    print(f"\nUsing {modelType} as Encoder{' with Dynamic Training.' if dynamic_training else '.'}\n")
 
     model.fit(train_dataset, epochs=epochs, validation_data=val_dataset, callbacks=callbacks)
     return
