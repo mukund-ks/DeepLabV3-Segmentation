@@ -163,6 +163,8 @@ data_ews/
 data_pss/
 augmented_data_ews/
 augmented_data_pss/
+augmented_data/
 logs/
-results/
+output/
+eval_results/
 best_model.pth
