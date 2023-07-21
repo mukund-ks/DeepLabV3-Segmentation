@@ -62,7 +62,7 @@ def tf_dataset(X: Any, Y: Any, batch: int = 2) -> Any:
 
 
 def trainer(
-    dynamic_training: bool,
+    stop_early: bool,
     batches: int,
     epochs: int,
     modelType: str = "ResNet101",
@@ -101,12 +101,12 @@ def trainer(
         TensorBoard(),
     ]
 
-    if dynamic_training:
+    if stop_early:
         callbacks.append(
             EarlyStopping(monitor="val_loss", patience=20, restore_best_weights=False),
         )
         
-    print(f"\nUsing {modelType} as Encoder{' with Dynamic Training.' if dynamic_training else '.'}\n")
+    print(f"\nUsing {modelType} as Encoder{' with Dynamic Training.' if stop_early else '.'}\n")
 
     model.fit(train_dataset, epochs=epochs, validation_data=val_dataset, callbacks=callbacks)
     return

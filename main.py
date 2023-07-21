@@ -42,8 +42,7 @@ import traceback
     help="Opt-in to split data into Training and Validation set. Default - True",
 )
 @click.option(
-    "-d",
-    "--dynamic-training",
+    "--stop-early",
     type=bool,
     default=True,
     help="Opt-in to stop Training early if val_loss isn't improving. Default - True",
@@ -67,7 +66,7 @@ def main(
     eval_dir: str,
     augmentation: bool,
     split_data: bool,
-    dynamic_training: bool,
+    stop_early: bool,
     batch_size: int,
     epochs: int,
     model_type: str,
@@ -82,7 +81,7 @@ def main(
         processData(data_dir=data_dir, augmentation=augmentation, split_data=split_data)
         click.echo(f"\nTraining Phase\n{'-'*10}")
         trainer(
-            dynamic_training = dynamic_training,
+            stop_early = stop_early,
             batches=batch_size,
             epochs=epochs,
             modelType=model_type,
