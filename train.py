@@ -75,7 +75,7 @@ def trainer(
     files_dir = "output"
 
     model_path = os.path.join(files_dir, "model.h5")
-    csv_path = os.path.join(files_dir, "epoch_logs.csv")
+    csv_path = os.path.join(files_dir, "Epoch_Log.csv")
 
     if augmentation:
         train_path = os.path.join("./augmented_data", "Train")
