@@ -48,7 +48,9 @@ import traceback
     default=25,
     help="Number of epochs during training. Default - 25",
 )
-def main(data_dir, eval_dir, augmentation, batch_size, epochs, model_type) -> None:
+def main(
+    data_dir: str, eval_dir: str, augmentation: bool, batch_size: int, epochs: int, model_type: str
+) -> None:
     try:
         click.echo(f"Data Pre-Processing Phase\n{'-'*10}")
         processData(data_dir=data_dir, augmentation=augmentation)

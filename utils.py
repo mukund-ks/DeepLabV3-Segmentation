@@ -17,14 +17,14 @@ def loadData(path: str) -> list[str]:
     return x, y
 
 
-def shuffling(x, y):
+def shuffling(x, y) -> tuple:
     x, y = shuffle(x, y, random_state=42)
     return x, y
 
 
 def splitData(path: str) -> list[str]:
-    X = sorted(glob(os.path.join(path, "images", "*.png")))
-    Y = sorted(glob(os.path.join(path, "masks", "*.png")))
+    X = sorted(glob(os.path.join(path, "Image", "*.png")))
+    Y = sorted(glob(os.path.join(path, "Mask", "*.png")))
 
     x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
 

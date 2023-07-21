@@ -17,13 +17,14 @@ from keras.metrics import Recall, Precision
 from model import createModel
 from metrics import dice_loss, dice_coef, iou
 from utils import createDir, loadData, shuffling
+from typing import Any
 
 H = 256
 W = 256
 LR = 1e-4
 
 
-def read_image(path):
+def read_image(path: Any) -> Any:
     path = path.decode()
     x = cv2.imread(path, cv2.IMREAD_COLOR)
     x = x / 255.0  # normalizing image
@@ -31,7 +32,7 @@ def read_image(path):
     return x
 
 
-def read_mask(path):
+def read_mask(path: Any) -> Any:
     path = path.decode()
     x = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
     x = x / 255.0  # normalizing the mask
@@ -40,7 +41,7 @@ def read_mask(path):
     return x
 
 
-def tf_parse(x, y):
+def tf_parse(x: Any, y: Any) -> Any:
     def _parse(x, y):
         x = read_image(x)
         y = read_mask(y)
@@ -52,7 +53,7 @@ def tf_parse(x, y):
     return x, y
 
 
-def tf_dataset(X, Y, batch=2):
+def tf_dataset(X: Any, Y: Any, batch: int = 2) -> Any:
     dataset = tf.data.Dataset.from_tensor_slices((X, Y))
     dataset = dataset.map(tf_parse)
     dataset = dataset.batch(batch)
@@ -66,7 +67,7 @@ def trainer(
     epochs: int = 25,
     modelType: str = "ResNet101",
     data_dir: str = "",
-):
+) -> None:
     np.random.seed(42)
     tf.random.set_seed(42)
 

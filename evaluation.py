@@ -5,7 +5,7 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 import numpy as np
 import cv2
 import pandas as pd
-from glob import glob
+from typing import Any
 from tqdm import tqdm
 import tensorflow as tf
 from keras.utils import CustomObjectScope
@@ -18,7 +18,7 @@ H = 256
 W = 256
 
 
-def saveResults(img, mask, y_pred, save_img_path):
+def saveResults(img: Any, mask: Any, y_pred: Any, save_img_path: str) -> None:
     line = np.ones((H, 10, 3)) * 128
 
     mask = np.expand_dims(mask, axis=-1)
@@ -37,9 +37,12 @@ def saveResults(img, mask, y_pred, save_img_path):
     return
 
 
-def evaluator(eval_dir: str):
+def evaluator(eval_dir: str) -> None:
     np.random.seed(42)
     tf.random.set_seed(42)
+
+    if not os.path.exists(eval_dir):
+        raise OSError("Path does not exist.", eval_dir)
 
     createDir("eval_results")
 
@@ -87,7 +90,7 @@ def evaluator(eval_dir: str):
     print(f"Precison: {score[4]:0.5f}")
 
     df = pd.DataFrame(SCORE, columns=["Image", "Accuracy", "F1", "Jaccard", "Recall", "Precison"])
-    df.to_csv("./eval_results/eval_score.csv")
+    df.to_csv("./eval_results/Evaluation_Score.csv")
 
     return
 

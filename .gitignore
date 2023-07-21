@@ -159,7 +159,10 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-data/
+data_ews/
+data_pss/
+augmented_data_ews/
+augmented_data_pss/
 logs/
 results/
 best_model.pth

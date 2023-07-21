@@ -1,8 +1,6 @@
 import os
-from typing import Any
 import numpy as np
 import cv2
-from glob import glob
 from tqdm import tqdm
 from albumentations import (
     HorizontalFlip,
@@ -14,7 +12,7 @@ from albumentations import (
 from utils import splitData, createDirs
 
 
-def augment_data(images, masks, save_path, augment=True) -> None:
+def augment_data(images: list, masks: list, save_path: str, augment: bool = True) -> None:
     H = 256
     W = 256
 
@@ -22,20 +20,13 @@ def augment_data(images, masks, save_path, augment=True) -> None:
         name = x.split("\\")[-1].split(".")[0]
 
         x = cv2.imread(x, cv2.IMREAD_COLOR)
-        # cv2.imwrite('x.png',x)
         y = cv2.imread(y, cv2.IMREAD_GRAYSCALE)
-        # cv2.imwrite('y.png',y)
 
         if augment:
             aug = HorizontalFlip(p=1.0)
             augmented = aug(image=x, mask=y)
             x1 = augmented["image"]
             y1 = augmented["mask"]
-
-            # aug = VerticalFlip(p=1.0)
-            # augmented = aug(image=x, mask=y)
-            # x2 = augmented["image"]
-            # y2 = augmented["mask"]
 
             aug = ChannelShuffle(p=1.0)
             augmented = aug(image=x, mask=y)
@@ -72,8 +63,8 @@ def augment_data(images, masks, save_path, augment=True) -> None:
             tmp_image_name = f"{name}_{index}.png"
             tmp_mask_name = f"{name}_{index}.png"
 
-            image_path = os.path.join(save_path, "image", tmp_image_name)
-            mask_path = os.path.join(save_path, "mask", tmp_mask_name)
+            image_path = os.path.join(save_path, "Image", tmp_image_name)
+            mask_path = os.path.join(save_path, "Mask", tmp_mask_name)
 
             if not cv2.imwrite(rf"{image_path}", i):
                 print("Could not save image.")
@@ -83,8 +74,6 @@ def augment_data(images, masks, save_path, augment=True) -> None:
                 break
 
             index += 1
-            # print(i.shape)
-            # print(m.shape)
     return
 
 
