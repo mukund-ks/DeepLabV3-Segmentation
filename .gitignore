@@ -163,7 +163,7 @@ data_ews/
 data_pss/
 augmented_data_ews/
 augmented_data_pss/
-augmented_data/
+new_data/
 logs/
 output/
 eval_results/
