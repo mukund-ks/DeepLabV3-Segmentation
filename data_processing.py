@@ -12,7 +12,7 @@ from albumentations import (
 from utils import loadData, splitData, createDirs
 
 
-def augment_data(images: list, masks: list, save_path: str, augment: bool = True) -> None:
+def augment_data(images: list, masks: list, save_path: str, augment: bool) -> None:
     H = 256
     W = 256
 
@@ -77,7 +77,7 @@ def augment_data(images: list, masks: list, save_path: str, augment: bool = True
     return
 
 
-def processData(data_dir: str, augmentation: bool = True, split_data: bool = True) -> None:
+def processData(data_dir: str, augmentation: bool, split_data: bool) -> None:
     np.random.seed(42)
 
     if not os.path.exists(data_dir):

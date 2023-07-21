@@ -62,9 +62,9 @@ def tf_dataset(X: Any, Y: Any, batch: int = 2) -> Any:
 
 
 def trainer(
-    dynamic_training: bool = True,
-    batches: int = 4,
-    epochs: int = 25,
+    dynamic_training: bool,
+    batches: int,
+    epochs: int,
     modelType: str = "ResNet101",
 ) -> None:
     np.random.seed(42)
