@@ -67,7 +67,7 @@ def evaluator(eval_dir: str) -> None:
         y_pred = y_pred > 0.5
         y_pred = y_pred.astype(np.int32)
 
-        save_img_path = f"./eval_results/{name}.png"
+        save_img_path = f"./eval_results/predictions/{name}.png"
 
         saveResults(image, mask, y_pred, save_img_path)
 
