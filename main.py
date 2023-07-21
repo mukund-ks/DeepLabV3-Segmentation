@@ -32,7 +32,21 @@ import traceback
     "--augmentation",
     type=bool,
     default=True,
-    help="Opt-in to apply augmentations to provided data. Also handles data splitting. Default - True",
+    help="Opt-in to apply augmentations to provided data. Default - True",
+)
+@click.option(
+    "-s",
+    "--split-data",
+    type=bool,
+    default=True,
+    help="Opt-in to split data into Training and Validation set. Default - True",
+)
+@click.option(
+    "-d",
+    "--dynamic-training",
+    type=bool,
+    default=True,
+    help="Opt-in to stop Training early if val_loss isn't improving. Default - True",
 )
 @click.option(
     "-b",
@@ -49,18 +63,29 @@ import traceback
     help="Number of epochs during training. Default - 25",
 )
 def main(
-    data_dir: str, eval_dir: str, augmentation: bool, batch_size: int, epochs: int, model_type: str
+    data_dir: str,
+    eval_dir: str,
+    augmentation: bool,
+    split_data: bool,
+    dynamic_training: bool,
+    batch_size: int,
+    epochs: int,
+    model_type: str,
 ) -> None:
+    """
+    A DeepLab V3+ Decoder based Segmentation Model with choice of Encoders b/w ResNet101 and ResNet50.\n
+    Please make sure that your data is structured according to the folder structure specified in the Github Repository.\n
+    See: https://github.com/mukund-ks/DeepLabV3-Segmentation
+    """
     try:
         click.echo(f"Data Pre-Processing Phase\n{'-'*10}")
-        processData(data_dir=data_dir, augmentation=augmentation)
+        processData(data_dir=data_dir, augmentation=augmentation, split_data=split_data)
         click.echo(f"\nTraining Phase\n{'-'*10}")
         trainer(
-            augmentation=augmentation,
+            dynamic_training = dynamic_training,
             batches=batch_size,
             epochs=epochs,
             modelType=model_type,
-            data_dir=data_dir,
         )
         click.echo(f"\nEvaluation Phase\n{'-'*10}")
         evaluator(eval_dir=eval_dir)

@@ -20,7 +20,8 @@ from keras.models import Model
 from keras.applications import ResNet50, ResNet101
 from typing import Any
 
-def squeeze_and_excite(inputs: Any | list, ratio: int = 8) -> Any | None:
+
+def squeeze_and_excite(inputs: Any, ratio: int = 8) -> Any:
     init = inputs
     filters = init.shape[-1]
     se_shape = (1, 1, filters)
@@ -44,7 +45,7 @@ def squeeze_and_excite(inputs: Any | list, ratio: int = 8) -> Any | None:
     return x
 
 
-def ASPP(inputs: Any | list) -> Any | None:
+def ASPP(inputs: Any) -> Any:
     shape = inputs.shape
     y1 = AveragePooling2D(pool_size=(shape[1], shape[2]))(inputs)
     y1 = Conv2D(256, 1, padding="same", use_bias=False)(y1)
@@ -81,7 +82,7 @@ def ASPP(inputs: Any | list) -> Any | None:
     return y
 
 
-def createModel(shape: tuple[int], modelType: str) -> Model:
+def createModel(shape: tuple[int] = (256, 256, 3), modelType: str = "ResNet101") -> Model:
     inputs = Input(shape)  # instantiating a tensor
 
     if modelType == "ResNet101":

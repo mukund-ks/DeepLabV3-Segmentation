@@ -9,7 +9,7 @@ from albumentations import (
     RandomRotate90,
     RandomBrightnessContrast,
 )
-from utils import splitData, createDirs
+from utils import loadData, splitData, createDirs
 
 
 def augment_data(images: list, masks: list, save_path: str, augment: bool = True) -> None:
@@ -77,28 +77,37 @@ def augment_data(images: list, masks: list, save_path: str, augment: bool = True
     return
 
 
-def processData(data_dir: str, augmentation: bool = True) -> None:
+def processData(data_dir: str, augmentation: bool = True, split_data: bool = True) -> None:
     np.random.seed(42)
 
     if not os.path.exists(data_dir):
         raise OSError("Directory does not exist.", data_dir)
 
-    x_train, y_train, x_test, y_test = splitData(data_dir)
+    if split_data:
+        x_train, y_train, x_test, y_test = splitData(data_dir)
+    else:
+        train_path = os.path.join(data_dir, "Train")
+        x_train, y_train = loadData(path=train_path)
+
+        test_path = os.path.join(data_dir, "Test")
+        x_test, y_test = loadData(path=test_path)
 
     print(f"Train\t: {len(x_train)} - {len(y_train)}")
     print(f"Test\t: {len(x_test)} - {len(y_test)}")
 
     createDirs(
-        "./augmented_data/Train/Image/",
-        "./augmented_data/Train/Mask/",
-        "./augmented_data/Test/Image/",
-        "./augmented_data/Test/Mask/",
+        (
+            "./new_data/Train/Image/",
+            "./new_data/Train/Mask/",
+            "./new_data/Test/Image/",
+            "./new_data/Test/Mask/",
+        )
     )
 
-    print("Augmenting Training Set:")
-    augment_data(x_train, y_train, "augmented_data/Train/", augment=augmentation)
-    print("Augmenting Testing Set: ")
-    augment_data(x_test, y_test, "augmented_data/Test/", augment=False)
+    print("Creating New Training Set: ")
+    augment_data(x_train, y_train, "./new_data/Train/", augment=augmentation)
+    print("Creating New Testing Set: ")
+    augment_data(x_test, y_test, "./new_data/Test/", augment=False)
 
     return
 

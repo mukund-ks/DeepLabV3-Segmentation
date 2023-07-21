@@ -62,11 +62,10 @@ def tf_dataset(X: Any, Y: Any, batch: int = 2) -> Any:
 
 
 def trainer(
-    augmentation: bool,
+    dynamic_training: bool = True,
     batches: int = 4,
     epochs: int = 25,
     modelType: str = "ResNet101",
-    data_dir: str = "",
 ) -> None:
     np.random.seed(42)
     tf.random.set_seed(42)
@@ -77,12 +76,8 @@ def trainer(
     model_path = os.path.join(files_dir, "model.h5")
     csv_path = os.path.join(files_dir, "Epoch_Log.csv")
 
-    if augmentation:
-        train_path = os.path.join("./augmented_data", "Train")
-        val_path = os.path.join("./augmented_data", "Test")
-    else:
-        train_path = os.path.join(data_dir, "Train")
-        val_path = os.path.join(data_dir, "Test")
+    train_path = os.path.join("./new_data", "Train")
+    val_path = os.path.join("./new_data", "Test")
 
     x_train, y_train = loadData(train_path)
     x_train, y_train = shuffling(x_train, y_train)
@@ -104,8 +99,12 @@ def trainer(
         ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=5, min_lr=1e-7, verbose=1),
         CSVLogger(csv_path),
         TensorBoard(),
-        EarlyStopping(monitor="val_loss", patience=20, restore_best_weights=False),
     ]
+
+    if dynamic_training:
+        callbacks.append(
+            EarlyStopping(monitor="val_loss", patience=20, restore_best_weights=False),
+        )
 
     model.fit(train_dataset, epochs=epochs, validation_data=val_dataset, callbacks=callbacks)
     return
