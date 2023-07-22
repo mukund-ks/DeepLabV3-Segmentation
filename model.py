@@ -89,7 +89,7 @@ def ASPP(inputs: Any) -> Any:
     return y
 
 
-def createModel(shape: tuple[int] = (256, 256, 3), modelType: str = "ResNet101") -> Model:
+def createModel( modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
     inputs = Input(shape)  # instantiating a tensor
 
     if modelType == "ResNet101":
@@ -147,5 +147,5 @@ def createModel(shape: tuple[int] = (256, 256, 3), modelType: str = "ResNet101")
 
 
 if __name__ == "__main__":
-    model = createModel((256, 256, 3), "ResNet50")
+    model = createModel("ResNet50")
     model.summary()
