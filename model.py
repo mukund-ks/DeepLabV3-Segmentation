@@ -107,8 +107,11 @@ def createModel(shape: tuple[int] = (256, 256, 3), modelType: str = "ResNet101")
 
     # Low-Level Features
     x_b = encoder.get_layer("conv2_block2_out").output
+    
     # 1x1 Convolution on Low-Level Features
-    x_b = Conv2D(filters=48, kernel_size=1, padding="same", use_bias=False)(x_b)
+    x_b = Conv2D(
+        filters=48, kernel_size=1, padding="same", use_bias=False, activity_regularizer="l2"
+    )(x_b)
     x_b = BatchNormalization()(x_b)
     x_b = Activation("relu")(x_b)
 
@@ -118,13 +121,17 @@ def createModel(shape: tuple[int] = (256, 256, 3), modelType: str = "ResNet101")
     x = squeeze_and_excite(x)
 
     # 3x3 Convolution on Concatenated Map
-    x = Conv2D(filters=256, kernel_size=3, padding="same", use_bias=False)(x)
+    x = Conv2D(
+        filters=256, kernel_size=3, padding="same", use_bias=False, activity_regularizer="l2"
+    )(x)
     x = BatchNormalization()(x)
     x = Activation("relu")(x)
     x = squeeze_and_excite(x)
 
     # 3x3 Convolution on Concatenated Map
-    x = Conv2D(filters=256, kernel_size=3, padding="same", use_bias=False)(x)
+    x = Conv2D(
+        filters=256, kernel_size=3, padding="same", use_bias=False, activity_regularizer="l2"
+    )(x)
     x = BatchNormalization()(x)
     x = Activation("relu")(x)
     x = squeeze_and_excite(x)
@@ -140,5 +147,5 @@ def createModel(shape: tuple[int] = (256, 256, 3), modelType: str = "ResNet101")
 
 
 if __name__ == "__main__":
-    model = createModel((256, 256, 3), "ResNet101")
+    model = createModel((256, 256, 3), "ResNet50")
     model.summary()
