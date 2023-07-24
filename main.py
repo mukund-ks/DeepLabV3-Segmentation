@@ -23,6 +23,7 @@ import traceback
 @click.option(
     "-m",
     "--model-type",
+    prompt="Model Type",
     type=click.Choice(["ResNet101", "ResNet50"], case_sensitive=True),
     required=True,
     help="Choice of Encoder.",
