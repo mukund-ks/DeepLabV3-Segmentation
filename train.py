@@ -13,7 +13,7 @@ from keras.callbacks import (
     TensorBoard,
 )
 from keras.optimizers import Adam
-from keras.metrics import Recall, Precision
+from keras.metrics import Recall, Precision, Accuracy
 from model import createModel
 from metrics import dice_loss, dice_coef, iou
 from utils import createDir, loadData, shuffling
@@ -65,7 +65,7 @@ def trainer(
     stop_early: bool,
     batches: int,
     epochs: int,
-    modelType: str = "ResNet101",
+    modelType: str,
 ) -> None:
     np.random.seed(42)
     tf.random.set_seed(42)
@@ -89,9 +89,11 @@ def trainer(
     train_dataset = tf_dataset(x_train, y_train, batch=batches)
     val_dataset = tf_dataset(x_val, y_val, batch=batches)
 
-    model = createModel((H, W, 3), modelType=modelType)
+    model = createModel(modelType=modelType, shape=(256, 256, 3))
     model.compile(
-        loss=dice_loss, optimizer=Adam(LR), metrics=[dice_coef, iou, Recall(), Precision()]
+        loss=dice_loss,
+        optimizer=Adam(LR),
+        metrics=[dice_coef, iou, Recall(), Precision(), Accuracy()],
     )
 
     callbacks = [
@@ -105,7 +107,7 @@ def trainer(
         callbacks.append(
             EarlyStopping(monitor="val_loss", patience=20, restore_best_weights=False),
         )
-        
+
     print(f"\nUsing {modelType} as Encoder{' with Early Stopping.' if stop_early else '.'}\n")
 
     model.fit(train_dataset, epochs=epochs, validation_data=val_dataset, callbacks=callbacks)

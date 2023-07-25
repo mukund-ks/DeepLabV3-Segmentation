@@ -61,35 +61,35 @@ def ASPP(inputs: Any) -> Any:
     y2 = Dropout(0.5)(y2)
     y2 = Activation("relu")(y2)
 
-    # 3x3 Convolution, Dilation Rate - 6
-    y3 = Conv2D(256, 3, padding="same", dilation_rate=6, use_bias=False)(inputs)
+    # 3x3 Convolution, Dilation Rate - 12
+    y3 = Conv2D(256, 3, padding="same", dilation_rate=12, use_bias=False)(inputs)
     y3 = BatchNormalization()(y3)
-    y3 = Dropout(0.5)(y2)
+    y3 = Dropout(0.5)(y3)
     y3 = Activation("relu")(y3)
 
-    # 3x3 Convolution, Dilation Rate - 12
-    y4 = Conv2D(256, 3, padding="same", dilation_rate=12, use_bias=False)(inputs)
+    # 3x3 Convolution, Dilation Rate - 24
+    y4 = Conv2D(256, 3, padding="same", dilation_rate=24, use_bias=False)(inputs)
     y4 = BatchNormalization()(y4)
-    y4 = Dropout(0.5)(y2)
+    y4 = Dropout(0.5)(y4)
     y4 = Activation("relu")(y4)
 
-    # 3x3 Convolution, Dilation Rate - 18
-    y5 = Conv2D(256, 3, padding="same", dilation_rate=18, use_bias=False)(inputs)
+    # 3x3 Convolution, Dilation Rate - 36
+    y5 = Conv2D(256, 3, padding="same", dilation_rate=36, use_bias=False)(inputs)
     y5 = BatchNormalization()(y5)
-    y5 = Dropout(0.5)(y2)
+    y5 = Dropout(0.5)(y5)
     y5 = Activation("relu")(y5)
 
     # 1x1 Convolution on the concatenated Feature Map
     y = Concatenate()([y1, y2, y3, y4, y5])
     y = Conv2D(256, 1, padding="same", use_bias=False)(y)
     y = BatchNormalization()(y)
-    y = Dropout(0.5)(y2)
+    y = Dropout(0.5)(y)
     y = Activation("relu")(y)
 
     return y
 
 
-def createModel( modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
+def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
     inputs = Input(shape)  # instantiating a tensor
 
     if modelType == "ResNet101":
@@ -107,10 +107,13 @@ def createModel( modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
 
     # Low-Level Features
     x_b = encoder.get_layer("conv2_block2_out").output
-    
+
     # 1x1 Convolution on Low-Level Features
     x_b = Conv2D(
-        filters=48, kernel_size=1, padding="same", use_bias=False, activity_regularizer="l2"
+        filters=48,
+        kernel_size=1,
+        padding="same",
+        use_bias=False,
     )(x_b)
     x_b = BatchNormalization()(x_b)
     x_b = Activation("relu")(x_b)
@@ -122,7 +125,10 @@ def createModel( modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
 
     # 3x3 Convolution on Concatenated Map
     x = Conv2D(
-        filters=256, kernel_size=3, padding="same", use_bias=False, activity_regularizer="l2"
+        filters=256,
+        kernel_size=3,
+        padding="same",
+        use_bias=False,
     )(x)
     x = BatchNormalization()(x)
     x = Activation("relu")(x)
@@ -130,7 +136,10 @@ def createModel( modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
 
     # 3x3 Convolution on Concatenated Map
     x = Conv2D(
-        filters=256, kernel_size=3, padding="same", use_bias=False, activity_regularizer="l2"
+        filters=256,
+        kernel_size=3,
+        padding="same",
+        use_bias=False,
     )(x)
     x = BatchNormalization()(x)
     x = Activation("relu")(x)
