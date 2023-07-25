@@ -96,7 +96,7 @@ def trainer(
 
     callbacks = [
         ModelCheckpoint(model_path, verbose=1, save_best_only=True),
-        ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=5, min_lr=1e-8, verbose=1),
+        ReduceLROnPlateau(monitor="val_loss", factor=0.01, patience=5, min_lr=1e-8, verbose=1),
         CSVLogger(csv_path),
         TensorBoard(),
     ]
@@ -106,7 +106,7 @@ def trainer(
             EarlyStopping(monitor="val_loss", patience=20, restore_best_weights=False),
         )
         
-    print(f"\nUsing {modelType} as Encoder{' with Dynamic Training.' if stop_early else '.'}\n")
+    print(f"\nUsing {modelType} as Encoder{' with Early Stopping.' if stop_early else '.'}\n")
 
     model.fit(train_dataset, epochs=epochs, validation_data=val_dataset, callbacks=callbacks)
     return
