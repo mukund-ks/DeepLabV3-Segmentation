@@ -13,7 +13,7 @@ from keras.callbacks import (
     TensorBoard,
 )
 from keras.optimizers import Adam
-from keras.metrics import Recall, Precision
+from keras.metrics import Recall, Precision, Accuracy
 from model import createModel
 from metrics import dice_loss, dice_coef, iou
 from utils import createDir, loadData, shuffling
@@ -89,14 +89,14 @@ def trainer(
     train_dataset = tf_dataset(x_train, y_train, batch=batches)
     val_dataset = tf_dataset(x_val, y_val, batch=batches)
 
-    model = createModel((H, W, 3), modelType=modelType)
+    model = createModel(shape=(H, W, 3), modelType=modelType)
     model.compile(
-        loss=dice_loss, optimizer=Adam(LR), metrics=[dice_coef, iou, Recall(), Precision()]
+        loss=dice_loss, optimizer=Adam(LR), metrics=[dice_coef, iou, Recall(), Precision(), Accuracy()]
     )
 
     callbacks = [
         ModelCheckpoint(model_path, verbose=1, save_best_only=True),
-        ReduceLROnPlateau(monitor="val_loss", factor=0.01, patience=5, min_lr=1e-8, verbose=1),
+        ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=5, min_lr=1e-8, verbose=1),
         CSVLogger(csv_path),
         TensorBoard(),
     ]
