@@ -89,16 +89,14 @@ def trainer(
     train_dataset = tf_dataset(x_train, y_train, batch=batches)
     val_dataset = tf_dataset(x_val, y_val, batch=batches)
 
-    model = createModel(modelType=modelType, shape=(256, 256, 3))
+    model = createModel(shape=(H, W, 3), modelType=modelType)
     model.compile(
-        loss=dice_loss,
-        optimizer=Adam(LR),
-        metrics=[dice_coef, iou, Recall(), Precision(), Accuracy()],
+        loss=dice_loss, optimizer=Adam(LR), metrics=[dice_coef, iou, Recall(), Precision(), Accuracy()]
     )
 
     callbacks = [
         ModelCheckpoint(model_path, verbose=1, save_best_only=True),
-        ReduceLROnPlateau(monitor="val_loss", factor=0.01, patience=5, min_lr=1e-8, verbose=1),
+        ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=5, min_lr=1e-8, verbose=1),
         CSVLogger(csv_path),
         TensorBoard(),
     ]

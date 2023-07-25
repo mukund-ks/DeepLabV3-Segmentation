@@ -18,7 +18,6 @@ from keras.layers import (
     Dense,
 )
 from keras.models import Model
-from keras.regularizers import L1L2
 from keras.applications import ResNet50, ResNet101
 from typing import Any
 
