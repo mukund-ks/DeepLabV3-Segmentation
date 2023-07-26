@@ -63,19 +63,16 @@ def ASPP(inputs: Any) -> Any:
     # 3x3 Convolution, Dilation Rate - 12
     y3 = Conv2D(256, 3, padding="same", dilation_rate=12, use_bias=False)(inputs)
     y3 = BatchNormalization()(y3)
-    y3 = Dropout(0.5)(y3)
     y3 = Activation("relu")(y3)
 
     # 3x3 Convolution, Dilation Rate - 24
     y4 = Conv2D(256, 3, padding="same", dilation_rate=24, use_bias=False)(inputs)
     y4 = BatchNormalization()(y4)
-    y4 = Dropout(0.5)(y4)
     y4 = Activation("relu")(y4)
 
     # 3x3 Convolution, Dilation Rate - 36
     y5 = Conv2D(256, 3, padding="same", dilation_rate=36, use_bias=False)(inputs)
     y5 = BatchNormalization()(y5)
-    y5 = Dropout(0.5)(y5)
     y5 = Activation("relu")(y5)
 
     # 1x1 Convolution on the concatenated Feature Map
@@ -141,6 +138,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
         use_bias=False,
     )(x)
     x = BatchNormalization()(x)
+    x = Dropout(0.5)(x)
     x = Activation("relu")(x)
     x = squeeze_and_excite(x)
 
