@@ -161,6 +161,8 @@ cython_debug/
 
 data_ews/
 data_pss/
+data_cvppp/
+eval_cvppp/
 augmented_data_ews/
 augmented_data_pss/
 new_data/
