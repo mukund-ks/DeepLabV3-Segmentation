@@ -21,7 +21,7 @@ from typing import Any
 
 H = 256
 W = 256
-LR = 1e-2
+LR = 1e-3
 
 
 def read_image(path: Any) -> Any:
@@ -67,6 +67,10 @@ def trainer(
     epochs: int,
     modelType: str,
 ) -> None:
+    gpus = tf.config.experimental.list_physical_devices("GPU")
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
+
     np.random.seed(42)
     tf.random.set_seed(42)
 
@@ -91,7 +95,9 @@ def trainer(
 
     model = createModel(shape=(H, W, 3), modelType=modelType)
     model.compile(
-        loss=dice_loss, optimizer=Adam(LR), metrics=[dice_coef, iou, Recall(), Precision(), Accuracy()]
+        loss=dice_loss,
+        optimizer=Adam(LR),
+        metrics=[dice_coef, iou, Recall(), Precision(), Accuracy()],
     )
 
     callbacks = [
