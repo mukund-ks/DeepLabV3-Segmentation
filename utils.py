@@ -26,7 +26,7 @@ def splitData(path: str) -> list[str]:
     X = sorted(glob(os.path.join(path, "Image", "*.png")))
     Y = sorted(glob(os.path.join(path, "Mask", "*.png")))
 
-    x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
+    x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
 
     return x_train, y_train, x_test, y_test
 

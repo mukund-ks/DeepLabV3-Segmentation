@@ -60,18 +60,18 @@ def ASPP(inputs: Any) -> Any:
     y2 = Dropout(0.5)(y2)
     y2 = Activation("relu")(y2)
 
-    # 3x3 Convolution, Dilation Rate - 12
-    y3 = Conv2D(256, 3, padding="same", dilation_rate=12, use_bias=False)(inputs)
+    # 3x3 Convolution, Dilation Rate - 12 or 6
+    y3 = Conv2D(256, 3, padding="same", dilation_rate=6, use_bias=False)(inputs)
     y3 = BatchNormalization()(y3)
     y3 = Activation("relu")(y3)
 
-    # 3x3 Convolution, Dilation Rate - 24
-    y4 = Conv2D(256, 3, padding="same", dilation_rate=24, use_bias=False)(inputs)
+    # 3x3 Convolution, Dilation Rate - 24 or 12
+    y4 = Conv2D(256, 3, padding="same", dilation_rate=12, use_bias=False)(inputs)
     y4 = BatchNormalization()(y4)
     y4 = Activation("relu")(y4)
 
-    # 3x3 Convolution, Dilation Rate - 36
-    y5 = Conv2D(256, 3, padding="same", dilation_rate=36, use_bias=False)(inputs)
+    # 3x3 Convolution, Dilation Rate - 36 or 18
+    y5 = Conv2D(256, 3, padding="same", dilation_rate=18, use_bias=False)(inputs)
     y5 = BatchNormalization()(y5)
     y5 = Activation("relu")(y5)
 
