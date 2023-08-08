@@ -18,6 +18,8 @@
 
 - [Table Of Contents](#table-of-contents)
 - [About The Project](#about-the-project)
+- [Results](#results)
+  - [EWS](#ews)
 - [Built With](#built-with)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -49,6 +51,26 @@ _Datasets used during development of this project are given below:_
 * [CVPPP Dataset](https://www.plant-phenotyping.org/datasets-home)
 
 The ultimate objective of the project is to develop a strong model that can accurately segment plant-related regions inside photographs, which can have applications in a variety of fields, such as agriculture, botany, and environmental sciences. The included code demonstrates how to prepare the data, create the model's architecture, train it on the dataset, and assess the model's effectiveness using a variety of metrics.
+
+## Results
+
+Results of the developed Model on EWS, PSS and CVPPP Dataset.
+
+### EWS 
+
+On the basis of IoU, the results of this repository are compared to [Zenkl et al. (2022)](https://www.frontiersin.org/articles/10.3389/fpls.2021.774068/full), [Yu et al. (2017)](https://plantmethods.biomedcentral.com/articles/10.1186/s13007-017-0168-4), [Sadeghi-Tehran et al. (2020)](https://spj.science.org/doi/10.34133/2020/3521852) and [Rico-Fernández et al. (2018)](https://www.sciencedirect.com/science/article/abs/pii/S0168169918301911?via%3Dihub).
+
+A Development Flowchart and configurations of different model versions for the EWS Dataset can be accessed [here](https://t.ly/eYQHe).
+
+
+| Benchmark                        |    IoU    |
+| :------------------------------- | :-------: |
+| **Repository (Model V1.5)**      | **0.768** |
+| **Zenkl et al. (2022)**          |   0.775   |
+| **Yu et al. (2017)**             |   0.666   |
+| **Sadeghi-Tehran et al. (2020)** |   0.638   |
+| **Rico-Fernández et al. (2018)** |   0.691   |
+
 
 ## Built With
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
