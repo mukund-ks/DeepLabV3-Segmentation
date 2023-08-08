@@ -60,7 +60,7 @@ Results of the developed Model on EWS, PSS and CVPPP Dataset.
 
 On the basis of IoU, the results of this repository are compared to [Zenkl et al. (2022)](https://www.frontiersin.org/articles/10.3389/fpls.2021.774068/full), [Yu et al. (2017)](https://plantmethods.biomedcentral.com/articles/10.1186/s13007-017-0168-4), [Sadeghi-Tehran et al. (2020)](https://spj.science.org/doi/10.34133/2020/3521852) and [Rico-Fernández et al. (2018)](https://www.sciencedirect.com/science/article/abs/pii/S0168169918301911?via%3Dihub).
 
-A Development Flowchart and configurations of different model versions for the EWS Dataset can be accessed [here](https://t.ly/eYQHe).
+A Development Flowchart and several model version configurations for the EWS Dataset may be found [here](https://t.ly/eYQHe).
 
 
 | Benchmark                        |    IoU    |
