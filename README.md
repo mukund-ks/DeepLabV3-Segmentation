@@ -65,7 +65,7 @@ A Development Flowchart and several model version configurations for the EWS Dat
 
 | Benchmark                        |    IoU    |
 | :------------------------------- | :-------: |
-| **Repository (Model V1.5)**      | **0.768** |
+| **Repository (Model v1.5)**      | **0.768** |
 | **Zenkl et al. (2022)**          |   0.775   |
 | **Yu et al. (2017)**             |   0.666   |
 | **Sadeghi-Tehran et al. (2020)** |   0.638   |
