@@ -20,6 +20,8 @@
 - [About The Project](#about-the-project)
 - [Results](#results)
   - [EWS](#ews)
+    - [ResNet50 Backbone](#resnet50-backbone)
+    - [ResNet101 Backbone](#resnet101-backbone)
 - [Built With](#built-with)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -60,12 +62,23 @@ Results of the developed Model on EWS, PSS and CVPPP Dataset.
 
 On the basis of IoU, the results of this repository are compared to [Zenkl et al. (2022)](https://www.frontiersin.org/articles/10.3389/fpls.2021.774068/full), [Yu et al. (2017)](https://plantmethods.biomedcentral.com/articles/10.1186/s13007-017-0168-4), [Sadeghi-Tehran et al. (2020)](https://spj.science.org/doi/10.34133/2020/3521852) and [Rico-Fernández et al. (2018)](https://www.sciencedirect.com/science/article/abs/pii/S0168169918301911?via%3Dihub).
 
-A Development Flowchart and several model version configurations for the EWS Dataset may be found [here](https://t.ly/uNpgs).
+A Development Flowchart and several model version configurations for ResNet50 and ResNet101 backbone on the EWS Dataset may be found [here](https://t.ly/uNpgs).
 
+#### ResNet50 Backbone
 
 | Benchmark                        |    IoU    |
 | :------------------------------- | :-------: |
 | **Repository (Model v1.5)**      | **0.768** |
+| **Zenkl et al. (2022)**          |   0.775   |
+| **Yu et al. (2017)**             |   0.666   |
+| **Sadeghi-Tehran et al. (2020)** |   0.638   |
+| **Rico-Fernández et al. (2018)** |   0.691   |
+
+#### ResNet101 Backbone
+
+| Benchmark                        |    IoU    |
+| :------------------------------- | :-------: |
+| **Repository (Model v1.7)**      | **0.763** |
 | **Zenkl et al. (2022)**          |   0.775   |
 | **Yu et al. (2017)**             |   0.666   |
 | **Sadeghi-Tehran et al. (2020)** |   0.638   |
