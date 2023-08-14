@@ -4,9 +4,10 @@ import cv2
 from tqdm import tqdm
 from albumentations import (
     HorizontalFlip,
+    VerticalFlip,
     ChannelShuffle,
+    RandomSizedCrop,
     Rotate,
-    RandomRotate90,
     RandomBrightnessContrast,
 )
 from utils import loadData, splitData, createDirs
@@ -33,7 +34,7 @@ def augment_data(images: list, masks: list, save_path: str, augment: bool) -> No
             x2 = augmented["image"]
             y2 = augmented["mask"]
 
-            aug = RandomRotate90(p=1.0)
+            aug = VerticalFlip(p=1.0)
             augmented = aug(image=x, mask=y)
             x3 = augmented["image"]
             y3 = augmented["mask"]
@@ -48,8 +49,13 @@ def augment_data(images: list, masks: list, save_path: str, augment: bool) -> No
             x5 = augmented["image"]
             y5 = augmented["mask"]
 
-            X = [x, x1, x2, x3, x4, x5]
-            Y = [y, y1, y2, y3, y4, y5]
+            aug = RandomSizedCrop(width=256, height=256, p=1.0)
+            augmented = aug(image=x, mask=y)
+            x6 = augmented["image"]
+            y6 = augmented["mask"]
+
+            X = [x, x1, x2, x3, x4, x5, x6]
+            Y = [y, y1, y2, y3, y4, y5, y6]
 
         else:
             X = [x]
