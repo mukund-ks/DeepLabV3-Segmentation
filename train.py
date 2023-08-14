@@ -1,10 +1,16 @@
 import os
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 
 import numpy as np
 import cv2
 import tensorflow as tf
+
+gpus = tf.config.experimental.list_physical_devices("GPU")
+for gpu in gpus:
+    tf.config.experimental.set_memory_growth(gpu, True)
+
 from keras.callbacks import (
     ModelCheckpoint,
     CSVLogger,
@@ -67,10 +73,6 @@ def trainer(
     epochs: int,
     modelType: str,
 ) -> None:
-    gpus = tf.config.experimental.list_physical_devices("GPU")
-    for gpu in gpus:
-        tf.config.experimental.set_memory_growth(gpu, True)
-
     np.random.seed(42)
     tf.random.set_seed(42)
 
@@ -80,8 +82,8 @@ def trainer(
     model_path = os.path.join(files_dir, "model.h5")
     csv_path = os.path.join(files_dir, "Epoch_Log.csv")
 
-    train_path = os.path.join("./new_data", "Train")
-    val_path = os.path.join("./new_data", "Test")
+    train_path = os.path.join("./a2_split", "Train")
+    val_path = os.path.join("./a2_split", "Test")
 
     x_train, y_train = loadData(train_path)
     x_train, y_train = shuffling(x_train, y_train)

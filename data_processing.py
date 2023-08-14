@@ -49,7 +49,7 @@ def augment_data(images: list, masks: list, save_path: str, augment: bool) -> No
             x5 = augmented["image"]
             y5 = augmented["mask"]
 
-            aug = RandomSizedCrop(width=256, height=256, p=1.0)
+            aug = RandomSizedCrop(min_max_height=(256, 256), width=256, height=256, p=1.0)
             augmented = aug(image=x, mask=y)
             x6 = augmented["image"]
             y6 = augmented["mask"]
