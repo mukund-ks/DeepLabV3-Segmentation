@@ -113,4 +113,4 @@ def processData(data_dir: str, augmentation: bool, split_data: bool) -> None:
 
 
 if __name__ == "__main__":
-    processData(data_dir="./data", augmentation=True)
+    processData(data_dir="./data_cvppp", augmentation=True, split_data=True)

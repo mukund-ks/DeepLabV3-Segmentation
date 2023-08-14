@@ -21,7 +21,7 @@ from typing import Any
 
 H = 256
 W = 256
-LR = 1e-4
+LR = 7e-4
 
 
 def read_image(path: Any) -> Any:

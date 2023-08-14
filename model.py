@@ -138,7 +138,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
         use_bias=False,
     )(x)
     x = BatchNormalization()(x)
-    x = Dropout(0.5)(x)
+    # x = Dropout(0.5)(x)
     x = Activation("relu")(x)
     x = squeeze_and_excite(x)
 
