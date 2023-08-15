@@ -82,8 +82,8 @@ def trainer(
     model_path = os.path.join(files_dir, "model.h5")
     csv_path = os.path.join(files_dir, "Epoch_Log.csv")
 
-    train_path = os.path.join("./a2_split", "Train")
-    val_path = os.path.join("./a2_split", "Test")
+    train_path = os.path.join("./new_data", "Train")
+    val_path = os.path.join("./new_data", "Test")
 
     x_train, y_train = loadData(train_path)
     x_train, y_train = shuffling(x_train, y_train)
@@ -106,7 +106,7 @@ def trainer(
         ModelCheckpoint(model_path, verbose=1, save_best_only=True),
         ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=5, min_lr=1e-8, verbose=1),
         CSVLogger(csv_path),
-        TensorBoard(),
+        TensorBoard(log_dir="logs"),
     ]
 
     if stop_early:
