@@ -137,6 +137,10 @@ A Development Flowchart and several model version configurations for ResNet50 an
 | **Sadeghi-Tehran et al. (2020)** |   0.638   |
 | **Rico-Fernández et al. (2018)** |   0.691   |
 
+|                        ![Model v1.5 Result](assets/EWS_ResNet50_Modelv1_5.png)                        |
+| :---------------------------------------------------------------------------------------------------: |
+| *ResNet50 Model v1.5 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Overlay* |
+
 #### ResNet101 Backbone
 
 | Benchmark                        |    IoU    |
@@ -146,6 +150,11 @@ A Development Flowchart and several model version configurations for ResNet50 an
 | **Yu et al. (2017)**             |   0.666   |
 | **Sadeghi-Tehran et al. (2020)** |   0.638   |
 | **Rico-Fernández et al. (2018)** |   0.691   |
+
+|                       ![Model v1.7 Result](assets/EWS_ResNet101_Modelv1_7.png)                        |
+| :---------------------------------------------------------------------------------------------------: |
+| *ResNet50 Model v1.7 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Overlay* |
+
 ### CVPPP
 
 Totaling 810 pictures of tobacco and Arabidopsis plants, the CVPPP LCC 2017 Dataset is divided into 4 directories, **A1** through **A4**. Arabidopsis plant photos are included in divides **A1**, **A2**, and **A4**, which have 128, 31, and 624 images, respectively. 27 photos of tobacco plants are included in **A3**.
