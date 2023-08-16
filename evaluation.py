@@ -96,4 +96,4 @@ def evaluator(eval_dir: str) -> None:
 
 
 if __name__ == "__main__":
-    evaluator(eval_dir="./eval_ews")
+    evaluator(eval_dir="./eval_data")

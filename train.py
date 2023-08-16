@@ -82,8 +82,8 @@ def trainer(
     model_path = os.path.join(files_dir, "model.h5")
     csv_path = os.path.join(files_dir, "Epoch_Log.csv")
 
-    train_path = os.path.join("./a3_split", "Train")
-    val_path = os.path.join("./a3_split", "Test")
+    train_path = os.path.join("./new_data", "Train")
+    val_path = os.path.join("./new_data", "Test")
 
     x_train, y_train = loadData(train_path)
     x_train, y_train = shuffling(x_train, y_train)
