@@ -153,7 +153,7 @@ A Development Flowchart and several model version configurations for ResNet50 an
 
 |                       ![Model v1.7 Result](assets/EWS_ResNet101_Modelv1_7.png)                        |
 | :---------------------------------------------------------------------------------------------------: |
-| *ResNet50 Model v1.7 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Overlay* |
+| *ResNet101 Model v1.7 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Overlay* |
 
 ### CVPPP
 
