@@ -175,19 +175,19 @@ Results can be found below.
 |    A4    | 0.921 |   0.043   |
 | A1+A2+A4 | 0.957 |   0.051   |
 
-|                   ![Model v1.1 Result](assets\CVPPP_ResNet50_Modelv1_1.png)                   |
+|                   ![Model v1.1 Result](assets/CVPPP_ResNet50_Modelv1_1.png)                   |
 | :-------------------------------------------------------------------------------------------: |
 | *A2 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
-|                   ![Model v1.2 Result](assets\CVPPP_ResNet50_Modelv1_2.png)                   |
+|                   ![Model v1.2 Result](assets/CVPPP_ResNet50_Modelv1_2.png)                   |
 | :-------------------------------------------------------------------------------------------: |
 | *A3 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
-|                   ![Model v1.3 Result](assets\CVPPP_ResNet50_Modelv1_3.png)                   |
+|                   ![Model v1.3 Result](assets/CVPPP_ResNet50_Modelv1_3.png)                   |
 | :-------------------------------------------------------------------------------------------: |
 | *A4 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
-|                      ![Model v1.5 Result](assets\CVPPP_ResNet50_Modelv1_5.png)                      |
+|                      ![Model v1.5 Result](assets/CVPPP_ResNet50_Modelv1_5.png)                      |
 | :-------------------------------------------------------------------------------------------------: |
 | *A1+A2+A4 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
