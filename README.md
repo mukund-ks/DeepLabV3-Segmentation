@@ -125,7 +125,7 @@ Results of the developed Model on EWS, PSS and CVPPP Dataset.
 
 On the basis of IoU, the results of this repository's best performing model are compared to [Zenkl et al. (2022)](https://www.frontiersin.org/articles/10.3389/fpls.2021.774068/full), [Yu et al. (2017)](https://plantmethods.biomedcentral.com/articles/10.1186/s13007-017-0168-4), [Sadeghi-Tehran et al. (2020)](https://spj.science.org/doi/10.34133/2020/3521852) and [Rico-Fernández et al. (2018)](https://www.sciencedirect.com/science/article/abs/pii/S0168169918301911?via%3Dihub).
 
-A Development Flowchart and several model version configurations for ResNet50 and ResNet101 backbone on the EWS Dataset may be found [here](https://t.ly/uNpgs).
+A Development Flowchart and several model version configurations for ResNet50 and ResNet101 backbone on the EWS Dataset can be found [here](https://t.ly/uNpgs).
 
 #### ResNet50 Backbone
 
@@ -137,9 +137,9 @@ A Development Flowchart and several model version configurations for ResNet50 an
 | **Sadeghi-Tehran et al. (2020)** |   0.638   |
 | **Rico-Fernández et al. (2018)** |   0.691   |
 
-|                        ![Model v1.5 Result](assets/EWS_ResNet50_Modelv1_5.png)                        |
-| :---------------------------------------------------------------------------------------------------: |
-| *ResNet50 Model v1.5 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Overlay* |
+|                            ![Model v1.5 Result](assets/EWS_ResNet50_Modelv1_5.png)                             |
+| :------------------------------------------------------------------------------------------------------------: |
+| *ResNet50 Model v1.5 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
 #### ResNet101 Backbone
 
@@ -151,9 +151,9 @@ A Development Flowchart and several model version configurations for ResNet50 an
 | **Sadeghi-Tehran et al. (2020)** |   0.638   |
 | **Rico-Fernández et al. (2018)** |   0.691   |
 
-|                       ![Model v1.7 Result](assets/EWS_ResNet101_Modelv1_7.png)                        |
-| :---------------------------------------------------------------------------------------------------: |
-| *ResNet101 Model v1.7 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Overlay* |
+|                            ![Model v1.7 Result](assets/EWS_ResNet101_Modelv1_7.png)                             |
+| :-------------------------------------------------------------------------------------------------------------: |
+| *ResNet101 Model v1.7 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
 ### CVPPP
 
@@ -174,6 +174,22 @@ Results can be found below.
 |    A3    | 0.450 |   0.362   |
 |    A4    | 0.921 |   0.043   |
 | A1+A2+A4 | 0.957 |   0.051   |
+
+|                   ![Model v1.1 Result](assets\CVPPP_ResNet50_Modelv1_1.png)                   |
+| :-------------------------------------------------------------------------------------------: |
+| *A2 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
+
+|                   ![Model v1.2 Result](assets\CVPPP_ResNet50_Modelv1_2.png)                   |
+| :-------------------------------------------------------------------------------------------: |
+| *A3 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
+
+|                   ![Model v1.3 Result](assets\CVPPP_ResNet50_Modelv1_3.png)                   |
+| :-------------------------------------------------------------------------------------------: |
+| *A4 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
+
+|                      ![Model v1.5 Result](assets\CVPPP_ResNet50_Modelv1_5.png)                      |
+| :-------------------------------------------------------------------------------------------------: |
+| *A1+A2+A4 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
 > **Note**
 > Data Augmentations were used for all training sets except A4.
