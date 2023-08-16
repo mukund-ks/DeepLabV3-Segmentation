@@ -158,13 +158,13 @@ Results can be found below.
 
 #### ResNet50 Backbone
 
-|    Split    |  IoU  | Dice-Loss |
-| :---------: | :---: | :-------: |
-|     A1      | 0.454 |   0.387   |
-|     A2      | 0.915 |   0.044   |
-|     A3      | 0.450 |   0.362   |
-|     A4      | 0.921 |   0.043   |
-| A1+A2+A3+A4 | 0.957 |   0.051   |
+|  Split   |  IoU  | Dice-Loss |
+| :------: | :---: | :-------: |
+|    A1    | 0.454 |   0.387   |
+|    A2    | 0.915 |   0.044   |
+|    A3    | 0.450 |   0.362   |
+|    A4    | 0.921 |   0.043   |
+| A1+A2+A4 | 0.957 |   0.051   |
 
 > **Note**
 > Data Augmentations were used for all training sets except A4.
