@@ -27,7 +27,7 @@ from typing import Any
 
 H = 256
 W = 256
-LR = 7e-4
+LR = 5e-4
 
 
 def read_image(path: Any) -> Any:
@@ -82,8 +82,8 @@ def trainer(
     model_path = os.path.join(files_dir, "model.h5")
     csv_path = os.path.join(files_dir, "Epoch_Log.csv")
 
-    train_path = os.path.join("./new_data", "Train")
-    val_path = os.path.join("./new_data", "Test")
+    train_path = os.path.join("./a3_split", "Train")
+    val_path = os.path.join("./a3_split", "Test")
 
     x_train, y_train = loadData(train_path)
     x_train, y_train = shuffling(x_train, y_train)
@@ -121,4 +121,4 @@ def trainer(
 
 
 if __name__ == "__main__":
-    trainer(batches=4, epochs=80, modelType="ResNet50", stop_early=False)
+    trainer(batches=4, epochs=80, modelType="ResNet101", stop_early=False)
