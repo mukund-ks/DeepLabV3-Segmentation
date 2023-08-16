@@ -26,6 +26,8 @@
   - [EWS](#ews)
     - [ResNet50 Backbone](#resnet50-backbone)
     - [ResNet101 Backbone](#resnet101-backbone)
+  - [CVPPP](#cvppp)
+    - [ResNet50 Backbone](#resnet50-backbone-1)
 - [Built With](#built-with)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -70,7 +72,7 @@ _Datasets used during development of this project are described below:_
 
 * [CVPPP Dataset](https://www.plant-phenotyping.org/datasets-home)
   
-  The Computer Vision Problems in Plant Phenotyping (CVPPP) Dataset provides 27 images of tobacco and 783 Arabidopsis images in separate folders. Using a camera with a single plant in its range of view, tobacco photos were gathered. Images of the Arabidopsis plant were taken with a camera that had a wider field of view and were later cropped.  The photographs were shot over a period of days from mutants or wild types, and they came from two different experimental settings, where the field of vision was different.
+  The Computer Vision Problems in Plant Phenotyping (CVPPP) Leaf Counting Challenge (LCC) 2017 Dataset provides 27 images of tobacco and 783 Arabidopsis images in separate folders from A1 through A4. Using a camera with a single plant in its range of view, tobacco photos were gathered. Images of the Arabidopsis plant were taken with a camera that had a wider field of view and were later cropped.  The photographs were shot over a period of days from mutants or wild types, and they came from two different experimental settings, where the field of vision was different.
 
   Additionally, certain plants are slightly out of focus than others due to the wider range of view. Though, the backgrounds of most photographs are straightforward and static, occasionally, moss growth or the presence of water in the growing tray complicates the scene.
   For the purpose of obtaining ground truth masks for every leaf/plant in the picture, each image was manually labeled.
@@ -144,7 +146,28 @@ A Development Flowchart and several model version configurations for ResNet50 an
 | **Yu et al. (2017)**             |   0.666   |
 | **Sadeghi-Tehran et al. (2020)** |   0.638   |
 | **Rico-Fernández et al. (2018)** |   0.691   |
+### CVPPP
 
+Totaling 810 pictures of tobacco and Arabidopsis plants, the CVPPP LCC 2017 Dataset is divided into 4 directories, **A1** through **A4**. Arabidopsis plant photos are included in divides **A1**, **A2**, and **A4**, which have 128, 31, and 624 images, respectively. 27 photos of tobacco plants are included in **A3**.
+
+A collection of 63 photos from the divides **A1** through **A4** were assembled to form an evaluation set, representing each split.
+
+Model training was done on **A1**, **A2**, **A3**, and **A4** separately for the outcomes of this repository's model. A separate split of 267 photos, consisting of 46 images from **A1**, 20 images from **A2**, and 201 images from **A4**, was also created and utilized for training.
+
+Results can be found below.
+
+#### ResNet50 Backbone
+
+|    Split    |  IoU  | Dice-Loss |
+| :---------: | :---: | :-------: |
+|     A1      | 0.454 |   0.387   |
+|     A2      | 0.915 |   0.044   |
+|     A3      | 0.450 |   0.362   |
+|     A4      | 0.921 |   0.043   |
+| A1+A2+A3+A4 | 0.957 |   0.051   |
+
+> **Note**
+> Data Augmentations were used for all training sets except A4.
 
 ## Built With
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
