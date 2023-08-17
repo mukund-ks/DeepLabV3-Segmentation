@@ -12,10 +12,6 @@ from albumentations import (
 )
 from utils import loadData, splitData, createDirs
 
-# TODO:
-#   * Debug Path and Image saving for Ubuntu
-
-
 def augment_data(images: list, masks: list, save_path: str, augment: bool) -> None:
     H = 256
     W = 256
