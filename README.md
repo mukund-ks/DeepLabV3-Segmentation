@@ -240,19 +240,19 @@ The best model found for this dataset produced the results listed below.
 | :--------: | :---: | :-------: |
 | Best Model | 0.516 |   0.356   |
 
-|                            ![Best Model - ResNet50 Result](assets/PSS_ResNet50_1.png)                            |
-| :--------------------------------------------------------------------------------------------------------------: |
-| *Best Model Result - ResNet50* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
+|                           ![Best Model - ResNet50 Result](assets/PSS_ResNet50_1.png)                           |
+| :------------------------------------------------------------------------------------------------------------: |
+| *Best Model Result-ResNet50* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
 #### ResNet101 Backbone
 
 |   Model    |  IoU  | Dice-Loss |
 | :--------: | :---: | :-------: |
-| Best Model | 0.516 |   0.356   |
+| Best Model | 0.523 |   0.346   |
 
-|                            ![Best Model - ResNet50 Result](assets/PSS_ResNet50_1.png)                            |
-| :--------------------------------------------------------------------------------------------------------------: |
-| *Best Model Result - ResNet50* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
+|                          ![Best Model - ResNet101 Result](assets/PSS_ResNet101_1.png)                           |
+| :-------------------------------------------------------------------------------------------------------------: |
+| *Best Model Result-ResNet101* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
 ## Built With
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
