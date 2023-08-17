@@ -28,6 +28,7 @@
     - [ResNet101 Backbone](#resnet101-backbone)
   - [CVPPP](#cvppp)
     - [ResNet50 Backbone](#resnet50-backbone-1)
+    - [ResNet101 Backbone](#resnet101-backbone-1)
 - [Built With](#built-with)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -175,21 +176,47 @@ Results can be found below.
 |    A4    | 0.921 |   0.043   |
 | A1+A2+A4 | 0.957 |   0.051   |
 
-|                   ![Model v1.1 Result](assets/CVPPP_ResNet50_Modelv1_1.png)                   |
-| :-------------------------------------------------------------------------------------------: |
-| *A2 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
+|                        ![Model v1.1 Result](assets/CVPPP_ResNet50_Modelv1_1.png)                         |
+| :------------------------------------------------------------------------------------------------------: |
+| *A2 Result - ResNet50* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
-|                   ![Model v1.2 Result](assets/CVPPP_ResNet50_Modelv1_2.png)                   |
-| :-------------------------------------------------------------------------------------------: |
-| *A3 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
+|                        ![Model v1.2 Result](assets/CVPPP_ResNet50_Modelv1_2.png)                         |
+| :------------------------------------------------------------------------------------------------------: |
+| *A3 Result - ResNet50* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
-|                   ![Model v1.3 Result](assets/CVPPP_ResNet50_Modelv1_3.png)                   |
-| :-------------------------------------------------------------------------------------------: |
-| *A4 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
+|                        ![Model v1.3 Result](assets/CVPPP_ResNet50_Modelv1_3.png)                         |
+| :------------------------------------------------------------------------------------------------------: |
+| *A4 Result - ResNet50* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
-|                      ![Model v1.5 Result](assets/CVPPP_ResNet50_Modelv1_5.png)                      |
-| :-------------------------------------------------------------------------------------------------: |
-| *A1+A2+A4 Result* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
+|                           ![Model v1.5 Result](assets/CVPPP_ResNet50_Modelv1_5.png)                            |
+| :------------------------------------------------------------------------------------------------------------: |
+| *A1+A2+A4 Result - ResNet50* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
+
+#### ResNet101 Backbone
+
+|  Split   |  IoU  | Dice-Loss |
+| :------: | :---: | :-------: |
+|    A1    | 0.447 |   0.398   |
+|    A2    | 0.892 |   0.056   |
+|    A3    | 0.480 |   0.322   |
+|    A4    | 0.915 |   0.045   |
+| A1+A2+A4 | 0.960 |   0.022   |
+
+|                        ![Model v1.1 Result](assets/CVPPP_ResNet101_Modelv1_1.png)                         |
+| :-------------------------------------------------------------------------------------------------------: |
+| *A2 Result - ResNet101* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
+
+|                        ![Model v1.2 Result](assets/CVPPP_ResNet101_Modelv1_2.png)                         |
+| :-------------------------------------------------------------------------------------------------------: |
+| *A3 Result - ResNet101* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
+
+|                        ![Model v1.3 Result](assets/CVPPP_ResNet101_Modelv1_3.png)                         |
+| :-------------------------------------------------------------------------------------------------------: |
+| *A4 Result - ResNet101* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
+
+|                           ![Model v1.5 Result](assets/CVPPP_ResNet101_Modelv1_5.png)                            |
+| :-------------------------------------------------------------------------------------------------------------: |
+| *A1+A2+A4 Result - ResNet101* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
 > **Note**
 > Data Augmentations were used for all training sets except A4.
