@@ -54,7 +54,7 @@ def evaluator(eval_dir: str) -> None:
 
     SCORE = []
     for x, y in tqdm(zip(x_test, y_test), total=len(x_test)):
-        name = x.split("\\")[-1].split(".")[0]
+        name = os.path.split(x)[1].split(".")[0]
 
         image = cv2.imread(x, cv2.IMREAD_COLOR)
         x = image / 255.0

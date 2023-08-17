@@ -21,7 +21,7 @@ def augment_data(images: list, masks: list, save_path: str, augment: bool) -> No
     W = 256
 
     for x, y in tqdm(zip(images, masks), total=len(images)):
-        name = x.split("\\")[-1].split(".")[0]
+        name = os.path.split(x)[1].split(".")[0]
 
         x = cv2.imread(x, cv2.IMREAD_COLOR)
         y = cv2.imread(y, cv2.IMREAD_GRAYSCALE)
