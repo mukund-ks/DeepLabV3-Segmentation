@@ -29,6 +29,9 @@
   - [CVPPP](#cvppp)
     - [ResNet50 Backbone](#resnet50-backbone-1)
     - [ResNet101 Backbone](#resnet101-backbone-1)
+  - [PSS](#pss)
+    - [ResNet50 Backbone](#resnet50-backbone-2)
+    - [ResNet101 Backbone](#resnet101-backbone-2)
 - [Built With](#built-with)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -91,7 +94,7 @@ Known for its precise pixel-by-pixel image segmentation skills, DeepLabV3+ is a 
 
 ### ResNet Backbone
 
-Residual Networks, often known as ResNets, are a class of deep neural network architectures created to address the vanishing gradient problem that can arise in very deep networks. They were first presented in the 2015 publication [*Deep Residual Learning for Image Recognition*](https://ieeexplore.ieee.org/document/7780459) by Kaiming He et al. ResNets have been extensively used for a number of tasks, including image classification, object recognition, and segmentation.
+Residual Networks, often known as ResNets, are a class of deep neural network architectures created to address the vanishing gradient problem that can arise in very deep networks. They were first presented in the 2015 publication [*Deep Residual Learning for Image Recognition*](https://ieeexplore.ieee.org/document/7780459) by **Kaiming He et al**. ResNets have been extensively used for a number of tasks, including image classification, object recognition, and segmentation.
 
 The main novelty in ResNets is the introduction of residual blocks, which allow for the training of extremely deep networks by providing shortcut connections (skip connections) that omit one or more layers. Through the use of these connections, gradients can pass directly through the network without disappearing or blowing up, enabling the training of far more complex structures.
 
@@ -112,7 +115,7 @@ ResNets are available in a range of depths, designated as ResNet-XX, where XX is
   
   This Module enables the network to generate precise and contextually rich segmentation maps by including skip links and mixing data from various scales. This is crucial for tasks like semantic segmentation, where accurate delineation of object boundaries is necessary for producing high-quality results.
 
-* ***Squeeze & Excitation (SE):*** It is a mechanism made to increase the convolutional neural networks' representational strength by explicitly modeling channel-wise interactions. Jie Hu et al. first discussed it in their publication [*Squeeze-and-Excitation Networks*](https://ieeexplore.ieee.org/document/8578843) published in 2018. In order to enable the model to focus greater attention on crucial features, the SE Module seeks to selectively emphasize informative channels while suppressing less critical ones within the network. 
+* ***Squeeze & Excitation (SE):*** It is a mechanism made to increase the convolutional neural networks' representational strength by explicitly modeling channel-wise interactions. **Jie Hu et al.** first discussed it in their paper [*Squeeze-and-Excitation Networks*](https://ieeexplore.ieee.org/document/8578843), published in 2018. In order to enable the model to focus greater attention on crucial features, the SE Module seeks to selectively emphasize informative channels while suppressing less critical ones within the network. 
   
   By computing the average value of each channel across all spatial dimensions, the global average pooling method is used. The end result is a channel-wise descriptor that accurately reflects the significance of each channel in relation to the overall feature map. 
 
@@ -158,7 +161,7 @@ A Development Flowchart and several model version configurations for ResNet50 an
 
 ### CVPPP
 
-Totaling 810 pictures of tobacco and Arabidopsis plants, the CVPPP LCC 2017 Dataset is divided into 4 directories, **A1** through **A4**. Arabidopsis plant photos are included in divides **A1**, **A2**, and **A4**, which have 128, 31, and 624 images, respectively. 27 photos of tobacco plants are included in **A3**.
+Totaling 810 pictures of Tobacco and Arabidopsis plants, the CVPPP LCC 2017 Dataset is divided into 4 directories, **A1** through **A4**. Arabidopsis plant photos are included in divides **A1**, **A2**, and **A4**, which have 128, 31, and 624 images, respectively. 27 photos of tobacco plants are included in **A3**.
 
 A collection of 63 photos from the divides **A1** through **A4** were assembled to form an evaluation set, representing each split.
 
@@ -222,6 +225,34 @@ Results can be found below.
 
 > **Note**
 > Data Augmentations were used for all training sets except A4.
+
+### PSS
+
+There are 144 photos in the Humans in the Loop (HIL) Plant Semantic Segmentation (PSS) Dataset. No additional splits were created because of the smaller size of the dataset. The masks from the dataset, however, were thresholded to only contain black or white color. Black is the background, whereas white is the plant.
+
+Data Augmentations were used during training of the model.
+
+The best model found for this dataset produced the results listed below.
+
+#### ResNet50 Backbone
+
+|   Model    |  IoU  | Dice-Loss |
+| :--------: | :---: | :-------: |
+| Best Model | 0.516 |   0.356   |
+
+|                            ![Best Model - ResNet50 Result](assets/PSS_ResNet50_1.png)                            |
+| :--------------------------------------------------------------------------------------------------------------: |
+| *Best Model Result - ResNet50* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
+
+#### ResNet101 Backbone
+
+|   Model    |  IoU  | Dice-Loss |
+| :--------: | :---: | :-------: |
+| Best Model | 0.516 |   0.356   |
+
+|                            ![Best Model - ResNet50 Result](assets/PSS_ResNet50_1.png)                            |
+| :--------------------------------------------------------------------------------------------------------------: |
+| *Best Model Result - ResNet50* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
 ## Built With
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
