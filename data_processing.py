@@ -12,6 +12,9 @@ from albumentations import (
 )
 from utils import loadData, splitData, createDirs
 
+# TODO:
+#   * Debug Path and Image saving for Ubuntu
+
 
 def augment_data(images: list, masks: list, save_path: str, augment: bool) -> None:
     H = 256
@@ -119,4 +122,4 @@ def processData(data_dir: str, augmentation: bool, split_data: bool) -> None:
 
 
 if __name__ == "__main__":
-    processData(data_dir="./data_cvppp", augmentation=True, split_data=True)
+    processData(data_dir="./data_pss", augmentation=False, split_data=True)
