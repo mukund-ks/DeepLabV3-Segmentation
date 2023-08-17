@@ -27,7 +27,7 @@ from typing import Any
 
 H = 256
 W = 256
-LR = 5e-4
+LR = 2e-4
 
 
 def read_image(path: Any) -> Any:
@@ -121,4 +121,4 @@ def trainer(
 
 
 if __name__ == "__main__":
-    trainer(batches=4, epochs=80, modelType="ResNet101", stop_early=False)
+    trainer(batches=4, epochs=80, modelType="ResNet50", stop_early=False)
