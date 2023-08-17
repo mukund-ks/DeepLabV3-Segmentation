@@ -164,17 +164,19 @@ A collection of 63 photos from the divides **A1** through **A4** were assembled 
 
 Model training was done on **A1**, **A2**, **A3**, and **A4** separately for the outcomes of this repository's model. A separate split of 267 photos, consisting of 46 images from **A1**, 20 images from **A2**, and 201 images from **A4**, was also created and utilized for training.
 
+A Development Flowchart and several model version configurations for ResNet50 and ResNet101 backbone on the CVPPP Dataset can be found [here](https://t.ly/rnPGV).
+
 Results can be found below.
 
 #### ResNet50 Backbone
 
-|  Split   |  IoU  | Dice-Loss |
-| :------: | :---: | :-------: |
-|    A1    | 0.454 |   0.387   |
-|    A2    | 0.915 |   0.044   |
-|    A3    | 0.450 |   0.362   |
-|    A4    | 0.921 |   0.043   |
-| A1+A2+A4 | 0.957 |   0.051   |
+|         Split         |  IoU  | Dice-Loss |
+| :-------------------: | :---: | :-------: |
+|          A1           | 0.454 |   0.387   |
+|          A2           | 0.915 |   0.044   |
+|          A3           | 0.450 |   0.362   |
+|          A4           | 0.921 |   0.043   |
+| A1+A2+A4 (Model v1.5) | 0.957 |   0.051   |
 
 |                        ![Model v1.1 Result](assets/CVPPP_ResNet50_Modelv1_1.png)                         |
 | :------------------------------------------------------------------------------------------------------: |
@@ -194,13 +196,13 @@ Results can be found below.
 
 #### ResNet101 Backbone
 
-|  Split   |  IoU  | Dice-Loss |
-| :------: | :---: | :-------: |
-|    A1    | 0.447 |   0.398   |
-|    A2    | 0.892 |   0.056   |
-|    A3    | 0.480 |   0.322   |
-|    A4    | 0.915 |   0.045   |
-| A1+A2+A4 | 0.960 |   0.022   |
+|         Split         |  IoU  | Dice-Loss |
+| :-------------------: | :---: | :-------: |
+|          A1           | 0.447 |   0.398   |
+|          A2           | 0.892 |   0.056   |
+|          A3           | 0.480 |   0.322   |
+|          A4           | 0.915 |   0.045   |
+| A1+A2+A4 (Model v1.5) | 0.960 |   0.022   |
 
 |                        ![Model v1.1 Result](assets/CVPPP_ResNet101_Modelv1_1.png)                         |
 | :-------------------------------------------------------------------------------------------------------: |
