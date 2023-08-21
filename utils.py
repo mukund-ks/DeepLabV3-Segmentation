@@ -4,6 +4,9 @@ from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
 from typing import Any
 
+# TODO:
+#   * Add 'getMaskLen' function.
+
 
 def createDir(path: str) -> None:
     if not os.path.exists(path):
