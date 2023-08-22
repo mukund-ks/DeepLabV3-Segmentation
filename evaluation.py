@@ -1,4 +1,5 @@
 import os
+import traceback
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
@@ -12,7 +13,7 @@ from keras.utils import CustomObjectScope
 from keras.models import load_model
 from sklearn.metrics import accuracy_score, f1_score, jaccard_score, precision_score, recall_score
 from metrics import dice_loss, dice_coef, iou
-from utils import loadData, createDir
+from utils import loadData, createDir, getMaskLen
 
 H = 256
 W = 256
@@ -49,7 +50,12 @@ def evaluator(eval_dir: str) -> None:
     with CustomObjectScope({"iou": iou, "dice_coef": dice_coef, "dice_loss": dice_loss}):
         model = load_model("./output/model.h5")
 
-    x_test, y_test = loadData(eval_dir)
+    try:
+        x_test, y_test = loadData(eval_dir)
+    except Exception as _:
+        traceback.print_exc()
+        exit("No input available.")
+
     print(f"Test:\nImages: {len(x_test)}\tMasks: {len(y_test)}")
 
     SCORE = []
@@ -67,6 +73,8 @@ def evaluator(eval_dir: str) -> None:
         y_pred = y_pred > 0.5
         y_pred = y_pred.astype(np.int32)
 
+        diagonal_len, horizontal_len, vertical_len = getMaskLen(y_pred)
+
         save_img_path = f"./eval_results/{name}.png"
 
         saveResults(image, mask, y_pred, save_img_path)
@@ -79,7 +87,19 @@ def evaluator(eval_dir: str) -> None:
         jac_scr = jaccard_score(mask, y_pred, labels=[0, 1], average="micro")
         recall_val = recall_score(mask, y_pred, labels=[0, 1], average="micro")
         precison_val = precision_score(mask, y_pred, labels=[0, 1], average="micro")
-        SCORE.append([name, acc_scr, f1_scr, jac_scr, recall_val, precison_val])
+        SCORE.append(
+            [
+                name,
+                acc_scr,
+                f1_scr,
+                jac_scr,
+                recall_val,
+                precison_val,
+                diagonal_len,
+                horizontal_len,
+                vertical_len,
+            ]
+        )
 
     score = [s[1:] for s in SCORE]
     score = np.mean(score, axis=0)
@@ -89,11 +109,24 @@ def evaluator(eval_dir: str) -> None:
     print(f"Recall: {score[3]:0.5f}")
     print(f"Precison: {score[4]:0.5f}")
 
-    df = pd.DataFrame(SCORE, columns=["Image", "Accuracy", "F1", "Jaccard", "Recall", "Precison"])
+    df = pd.DataFrame(
+        SCORE,
+        columns=[
+            "Image",
+            "Accuracy",
+            "F1",
+            "Jaccard",
+            "Recall",
+            "Precison",
+            "Diagonal Length (px)",
+            "Horizontal Length (px)",
+            "Vertical Length (px)",
+        ],
+    )
     df.to_csv("./eval_results/Evaluation_Score.csv")
 
     return
 
 
 if __name__ == "__main__":
-    evaluator(eval_dir="./eval_data")
+    evaluator(eval_dir="./eval_cvppp")
