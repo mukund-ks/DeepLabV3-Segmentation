@@ -234,23 +234,25 @@ Data Augmentations were used during training of the model.
 
 The best model found for this dataset produced the results listed below.
 
+A Development Flowchart and several model version configurations for ResNet50 and ResNet101 backbone on the PSS Dataset can be found [here](https://t.ly/HoTAG).
+
 #### ResNet50 Backbone
 
-|   Model    |  IoU  | Dice-Loss |
-| :--------: | :---: | :-------: |
-| Best Model | 0.516 |   0.356   |
+|       Model       |  IoU  | Dice-Loss |
+| :---------------: | :---: | :-------: |
+| Best Model (v1.3) | 0.550 |   0.306   |
 
-|                           ![Best Model - ResNet50 Result](assets/PSS_ResNet50_1.png)                           |
+|                       ![Best Model - ResNet50 Result](assets/PSS_ResNet50_Modelv1_3.png)                       |
 | :------------------------------------------------------------------------------------------------------------: |
 | *Best Model Result-ResNet50* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
 #### ResNet101 Backbone
 
-|   Model    |  IoU  | Dice-Loss |
-| :--------: | :---: | :-------: |
-| Best Model | 0.523 |   0.346   |
+|       Model       |  IoU  | Dice-Loss |
+| :---------------: | :---: | :-------: |
+| Best Model (v1.3) | 0.550 |   0.305   |
 
-|                          ![Best Model - ResNet101 Result](assets/PSS_ResNet101_1.png)                           |
+|                      ![Best Model - ResNet101 Result](assets/PSS_ResNet101_Modelv1_3.png)                       |
 | :-------------------------------------------------------------------------------------------------------------: |
 | *Best Model Result-ResNet101* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
