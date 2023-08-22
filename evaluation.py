@@ -101,7 +101,7 @@ def evaluator(eval_dir: str) -> None:
             ]
         )
 
-    score = [s[1:] for s in SCORE]
+    score = [s[1:6] for s in SCORE]
     score = np.mean(score, axis=0)
     print(f"Accuracy: {score[0]:0.5f}")
     print(f"F1-Score: {score[1]:0.5f}")
