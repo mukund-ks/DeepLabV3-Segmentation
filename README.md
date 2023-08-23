@@ -88,6 +88,10 @@ The ultimate objective of the project is to develop a strong model that can accu
 
 The objective of binary segmentation, often referred to as semantic binary segmentation, is to categorize each pixel in an image into one of two groups: the foreground (object of interest), or the background. A powerful Encoder-Decoder based architecture for solving binary segmentation challenges, DeepLabV3+ with ResNet50 or ResNet101 as the backbone offers great accuracy and spatial precision.
 
+| ![Architecure](diagrams/DeepLabV3Plus-Architecture-TF.png) |
+| :--------------------------------------------------------: |
+|   *Architecture of this Repository's Model - DeepLabV3+*   |
+
 ### DeepLabV3+
 
 Known for its precise pixel-by-pixel image segmentation skills, DeepLabV3+ is a powerful semantic segmentation model. It combines a robust feature extractor, such as ResNet50 or ResNet101, with an effective decoder. This architecture does a great job of capturing both local and global context information, which makes it suitable for tasks where accurate object boundaries and fine details are important. A crucial part is the Atrous Spatial Pyramid Pooling (ASPP) module, which uses several dilated convolutions to collect data on multiple scales. The decoder further improves the output by fusing high-level semantic features with precise spatial data. Highly precise segmentations across a variety of applications are made possible by this fusion of context and location awareness.
