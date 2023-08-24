@@ -1,7 +1,7 @@
 import os
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
-os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
+os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 
 from keras.layers import (
     Conv2D,
@@ -20,10 +20,11 @@ from keras.layers import (
 )
 from keras.models import Model
 from keras.applications import ResNet50, ResNet101
-from typing import Any
+from keras.regularizers import l2
+from keras.engine.keras_tensor import KerasTensor
 
 
-def squeeze_and_excite(inputs: Any, ratio: int = 8) -> Any:
+def squeeze_and_excite(inputs: KerasTensor, ratio: int = 8) -> KerasTensor:
     init = inputs
     filters = init.shape[-1]
     se_shape = (1, 1, filters)
@@ -34,12 +35,14 @@ def squeeze_and_excite(inputs: Any, ratio: int = 8) -> Any:
         filters // ratio,
         activation="relu",
         kernel_initializer="he_normal",
+        kernel_regularizer=l2(1e-4),
         use_bias=False,
     )(se)
     se = Dense(
         filters,
         activation="sigmoid",
         kernel_initializer="he_normal",
+        kernel_regularizer=l2(1e-4),
         use_bias=False,
     )(se)
 
@@ -47,7 +50,7 @@ def squeeze_and_excite(inputs: Any, ratio: int = 8) -> Any:
     return x
 
 
-def ASPP(inputs: Any) -> Any:
+def ASPP(inputs: KerasTensor) -> KerasTensor:
     shape = inputs.shape
     y1 = AveragePooling2D(pool_size=(shape[1], shape[2]))(inputs)
     y1 = Conv2D(256, 1, padding="same", use_bias=False)(y1)
@@ -58,7 +61,7 @@ def ASPP(inputs: Any) -> Any:
     # 1x1 Convolution
     y2 = Conv2D(256, 1, padding="same", use_bias=False)(inputs)
     y2 = BatchNormalization()(y2)
-    y2 = Dropout(0.5)(y2)
+    # y2 = Dropout(0.5)(y2)
     y2 = Activation("relu")(y2)
 
     # 3x3 Convolution, Dilation Rate - 12 or 6
@@ -80,7 +83,6 @@ def ASPP(inputs: Any) -> Any:
     y = Concatenate()([y1, y2, y3, y4, y5])
     y = Conv2D(256, 1, padding="same", use_bias=False)(y)
     y = BatchNormalization()(y)
-    y = Dropout(0.5)(y)
     y = Activation("relu")(y)
 
     return y
@@ -118,7 +120,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
     # Concatenating High-Level and Low-Level Features
     x = Concatenate()([x_a, x_b])
     x = Dropout(0.5)(x)
-    x = squeeze_and_excite(x)
+    # x = squeeze_and_excite(x)
 
     # 3x3 Convolution on Concatenated Map
     x = Conv2D(
