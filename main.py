@@ -21,7 +21,7 @@ import traceback
     help="Path for Evaluation Directory.",
 )
 @click.option(
-    "-m",
+    "-M",
     "--model-type",
     prompt="Model Type",
     type=click.Choice(["ResNet101", "ResNet50"], case_sensitive=True),
@@ -29,14 +29,14 @@ import traceback
     help="Choice of Encoder.",
 )
 @click.option(
-    "-a",
+    "-A",
     "--augmentation",
     type=bool,
     default=True,
     help="Opt-in to apply augmentations to provided data. Default - True",
 )
 @click.option(
-    "-s",
+    "-S",
     "--split-data",
     type=bool,
     default=True,
@@ -49,14 +49,14 @@ import traceback
     help="Opt-in to stop Training early if val_loss isn't improving. Default - True",
 )
 @click.option(
-    "-b",
+    "-B",
     "--batch-size",
     type=int,
     default=4,
     help="Batch size of data during training. Default - 4",
 )
 @click.option(
-    "-e",
+    "-E",
     "--epochs",
     type=int,
     default=25,

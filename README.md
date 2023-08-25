@@ -362,19 +362,24 @@ Usage: main.py [OPTIONS]
 Options:
   --data-dir TEXT                 Path for Data Directory.  [required]
   --eval-dir TEXT                 Path for Evaluation Directory.  [required]
-  -m, --model-type [ResNet101|ResNet50]
+  -M, --model-type [ResNet101|ResNet50]
                                   Choice of Encoder.  [required]
-  -a, --augmentation BOOLEAN      Opt-in to apply augmentations to provided
+  -A, --augmentation BOOLEAN      Opt-in to apply augmentations to provided
                                   data. Default - True
-  -s, --split-data BOOLEAN        Opt-in to split data into Training and
+  -S, --split-data BOOLEAN        Opt-in to split data into Training and
                                   Validation set. Default - True
   --stop-early BOOLEAN            Opt-in to stop Training early if val_loss
                                   isn't improving. Default - True
-  -b, --batch-size INTEGER        Batch size of data during training. Default
+  -B, --batch-size INTEGER        Batch size of data during training. Default
                                   - 4
-  -e, --epochs INTEGER            Number of epochs during training. Default -
+  -E, --epochs INTEGER            Number of epochs during training. Default -
                                   25
   --help                          Show this message and exit.
+```
+* An Example
+
+```console
+python main.py --data-dir data --eval-dir eval_data -M ResNet50 -A False -S True -B 16 -E 80 --stop-early False
 ```
 
 ## Folder Structure
