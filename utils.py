@@ -6,6 +6,9 @@ from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
 from typing import Any, Union
 
+H = 256
+W = 256
+
 
 def createDir(path: str) -> None:
     if not os.path.exists(path):
@@ -71,3 +74,22 @@ def getMaskLen(y_pred: np.ndarray) -> Union[float, int]:
     vertical_length = round(h, 2)
 
     return diagonal_length, horizontal_length, vertical_length
+
+
+def saveResults(img: Any, mask: Any, y_pred: Any, save_img_path: str) -> None:
+    line = np.ones((H, 10, 3)) * 128
+
+    mask = np.expand_dims(mask, axis=-1)
+    mask = np.concatenate([mask, mask, mask], axis=-1)
+    # mask = mask * 255
+
+    y_pred = np.expand_dims(y_pred, axis=-1)
+    y_pred = np.concatenate([y_pred, y_pred, y_pred], axis=-1)
+
+    masked_img = img * y_pred
+    y_pred = y_pred * 255
+
+    imgs = np.concatenate([img, line, mask, line, y_pred, line, masked_img], axis=1)
+    cv2.imwrite(save_img_path, imgs)
+
+    return

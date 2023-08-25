@@ -1,8 +1,8 @@
 import os
-import traceback
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
+import traceback
 import numpy as np
 import cv2
 import pandas as pd
@@ -13,29 +13,10 @@ from keras.utils import CustomObjectScope
 from keras.models import load_model
 from sklearn.metrics import accuracy_score, f1_score, jaccard_score, precision_score, recall_score
 from metrics import dice_loss, dice_coef, iou
-from utils import loadData, createDir, getMaskLen
+from utils import loadData, createDir, getMaskLen, saveResults
 
 H = 256
 W = 256
-
-
-def saveResults(img: Any, mask: Any, y_pred: Any, save_img_path: str) -> None:
-    line = np.ones((H, 10, 3)) * 128
-
-    mask = np.expand_dims(mask, axis=-1)
-    mask = np.concatenate([mask, mask, mask], axis=-1)
-    # mask = mask * 255
-
-    y_pred = np.expand_dims(y_pred, axis=-1)
-    y_pred = np.concatenate([y_pred, y_pred, y_pred], axis=-1)
-
-    masked_img = img * y_pred
-    y_pred = y_pred * 255
-
-    imgs = np.concatenate([img, line, mask, line, y_pred, line, masked_img], axis=1)
-    cv2.imwrite(save_img_path, imgs)
-
-    return
 
 
 def evaluator(eval_dir: str) -> None:
