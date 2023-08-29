@@ -40,7 +40,7 @@ def loadData(path: str) -> list[str]:
     return x, y
 
 
-def shuffling(x: Any, y: Any) -> tuple:
+def shuffling(x: list[str], y: list[str]) -> list[str]:
     """Helper function to shuffle training set.
 
     Args:
@@ -48,7 +48,7 @@ def shuffling(x: Any, y: Any) -> tuple:
         y (Any): Masks
 
     Returns:
-        tuple: Shuffled list of images and masks.
+        list[str]: Shuffled list of images and masks.
     """
     x, y = shuffle(x, y, random_state=42)
     return x, y
@@ -114,13 +114,13 @@ def getMaskLen(y_pred: np.ndarray) -> Union[float, int]:
     return diagonal_length, horizontal_length, vertical_length
 
 
-def saveResults(img: Any, mask: Any, y_pred: Any, save_img_path: str) -> None:
+def saveResults(img: np.ndarray, mask: np.ndarray, y_pred: np.ndarray, save_img_path: str) -> None:
     """Helper function to save evaluation results as a single png, with provided image, ground truth, predicted mask and segmented output, from left to right.
 
     Args:
-        img (Any): Input Image
-        mask (Any): Ground Truth
-        y_pred (Any): Predicted Mask
+        img (np.ndarray): Input Image
+        mask (np.ndarray): Ground Truth
+        y_pred (np.ndarray): Predicted Mask
         save_img_path (str): Directory to save the results in.
     """
     line = np.ones((H, 10, 3)) * 128
