@@ -44,8 +44,8 @@ def shuffling(x: list[str], y: list[str]) -> list[str]:
     """Helper function to shuffle training set.
 
     Args:
-        x (Any): Images
-        y (Any): Masks
+        x (list[str]): Images
+        y (list[str]): Masks
 
     Returns:
         list[str]: Shuffled list of images and masks.
