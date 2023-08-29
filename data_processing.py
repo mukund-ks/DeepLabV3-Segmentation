@@ -13,6 +13,14 @@ from albumentations import (
 from utils import loadData, splitData, createDirs
 
 def augment_data(images: list, masks: list, save_path: str, augment: bool) -> None:
+    """Function to apply augmentions and/or resize images to specific dimensions.
+
+    Args:
+        images (list): List containing paths to images.
+        masks (list): List containing paths to masks.
+        save_path (str): Path to save the new set.
+        augment (bool): Opt-in to apply augmentations to the dataset.
+    """
     H = 256
     W = 256
 
@@ -83,6 +91,16 @@ def augment_data(images: list, masks: list, save_path: str, augment: bool) -> No
 
 
 def processData(data_dir: str, augmentation: bool, split_data: bool) -> None:
+    """Function to prepare dataset for training.
+
+    Args:
+        data_dir (str): Path to Data Directory.
+        augmentation (bool): Opt-in to apply augmentations to provided data.
+        split_data (bool): Opt-in to split data into training & validation set.
+
+    Raises:
+        OSError: In case the provided Data Directory does not exist.
+    """
     np.random.seed(42)
 
     if not os.path.exists(data_dir):

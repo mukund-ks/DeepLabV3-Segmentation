@@ -20,6 +20,14 @@ W = 256
 
 
 def evaluator(eval_dir: str) -> None:
+    """Function to evaluate the trained model.
+
+    Args:
+        eval_dir (str): Path to evaluation directory.
+
+    Raises:
+        OSError: In case the provided Evaluation Path does not exist.
+    """
     np.random.seed(42)
     tf.random.set_seed(42)
 
@@ -110,4 +118,4 @@ def evaluator(eval_dir: str) -> None:
 
 
 if __name__ == "__main__":
-    evaluator(eval_dir="./eval_cvppp")
+    evaluator(eval_dir="./eval_data")

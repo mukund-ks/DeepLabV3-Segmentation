@@ -73,6 +73,14 @@ def trainer(
     epochs: int,
     modelType: str,
 ) -> None:
+    """Function to train the model.
+
+    Args:
+        stop_early (bool): Opt-in to use Early-Stopping during training.
+        batches (int): No. of batches.
+        epochs (int): No. of epochs.
+        modelType (str): Choice of backbone. ResNet50 or ResNet101.
+    """
     np.random.seed(42)
     tf.random.set_seed(42)
 

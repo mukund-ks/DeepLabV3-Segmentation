@@ -25,6 +25,15 @@ from keras.engine.keras_tensor import KerasTensor
 
 
 def squeeze_and_excite(inputs: KerasTensor, ratio: int = 8) -> KerasTensor:
+    """Function to apply Squeeze & Excitation to a feature map.
+
+    Args:
+        inputs (KerasTensor): Feature Map
+        ratio (int, optional): Ratio for excitation in first dense layer. Defaults to 8.
+
+    Returns:
+        KerasTensor: Re-calibrated feature map.
+    """
     init = inputs
     filters = init.shape[-1]
     se_shape = (1, 1, filters)
@@ -51,6 +60,14 @@ def squeeze_and_excite(inputs: KerasTensor, ratio: int = 8) -> KerasTensor:
 
 
 def ASPP(inputs: KerasTensor) -> KerasTensor:
+    """Function to apply Atrous Spatial Pyramid Pooling on features from backbone.
+
+    Args:
+        inputs (KerasTensor): Features from backbone.
+
+    Returns:
+        KerasTensor: Features with better spatial context.
+    """
     shape = inputs.shape
     y1 = AveragePooling2D(pool_size=(shape[1], shape[2]))(inputs)
     y1 = Conv2D(256, 1, padding="same", use_bias=False)(y1)
@@ -89,6 +106,15 @@ def ASPP(inputs: KerasTensor) -> KerasTensor:
 
 
 def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
+    """Creates a Model with the specified backbone.
+
+    Args:
+        modelType (str): Choice of backbone. ResNet50 or ResNet101.
+        shape (tuple[int]): Shape of input to the model. Defaults to (256, 256, 3).
+
+    Returns:
+        Model: Your DeepLabV3+ Model.
+    """
     inputs = Input(shape)  # instantiating a tensor
 
     if modelType == "ResNet101":

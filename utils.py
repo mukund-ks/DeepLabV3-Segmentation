@@ -11,12 +11,28 @@ W = 256
 
 
 def createDir(path: str) -> None:
+    """Helper function to create a directory.
+
+    Args:
+        path (str): Path to create.
+    """
     if not os.path.exists(path):
         os.makedirs(path)
     return
 
 
 def loadData(path: str) -> list[str]:
+    """Helper function to load data in lists from a directory.
+
+    Args:
+        path (str): Path to Data Directory.
+
+    Raises:
+        OSError: In case the Data Directory provided does not exist.
+
+    Returns:
+        list[str]: List of Images and Masks.
+    """
     x = sorted(glob(os.path.join(path, "Image", "*png")))
     y = sorted(glob(os.path.join(path, "Mask", "*png")))
     if len(x) == 0 or len(y) == 0:
@@ -25,11 +41,28 @@ def loadData(path: str) -> list[str]:
 
 
 def shuffling(x: Any, y: Any) -> tuple:
+    """Helper function to shuffle training set.
+
+    Args:
+        x (Any): Images
+        y (Any): Masks
+
+    Returns:
+        tuple: Shuffled list of images and masks.
+    """
     x, y = shuffle(x, y, random_state=42)
     return x, y
 
 
 def splitData(path: str) -> list[str]:
+    """Helper function to split data into training and validation sets.
+
+    Args:
+        path (str): Path to Data Directory.
+
+    Returns:
+        list[str]: Paths to images and masks.
+    """
     X = sorted(glob(os.path.join(path, "Image", "*.png")))
     Y = sorted(glob(os.path.join(path, "Mask", "*.png")))
 
@@ -39,6 +72,11 @@ def splitData(path: str) -> list[str]:
 
 
 def createDirs(paths: tuple[str]) -> None:
+    """Helper function to create a set of directories.
+
+    Args:
+        paths (tuple[str]): Tuple containing paths.
+    """
     for path in paths:
         if not os.path.exists(path):
             os.makedirs(path)
@@ -77,6 +115,14 @@ def getMaskLen(y_pred: np.ndarray) -> Union[float, int]:
 
 
 def saveResults(img: Any, mask: Any, y_pred: Any, save_img_path: str) -> None:
+    """Helper function to save evaluation results as a single png, with provided image, ground truth, predicted mask and segmented output, from left to right.
+
+    Args:
+        img (Any): Input Image
+        mask (Any): Ground Truth
+        y_pred (Any): Predicted Mask
+        save_img_path (str): Directory to save the results in.
+    """
     line = np.ones((H, 10, 3)) * 128
 
     mask = np.expand_dims(mask, axis=-1)
