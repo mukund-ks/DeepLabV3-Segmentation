@@ -24,20 +24,23 @@ H = 256
 W = 256
 LR = 2e-4
 
+MEAN = [0.485, 0.456, 0.406]
+STD = [0.229, 0.224, 0.225]
+
 
 def read_image(path: Any) -> Any:
     path = path.decode()
-    x = cv2.imread(path, cv2.IMREAD_COLOR)
-    x = x / 255.0  # normalizing image
-    x = x.astype(np.float32)
+    x = cv2.imread(path, cv2.IMREAD_COLOR).astype(np.float32)
+    x = x / 255.0  # normalizing and standardizing image with Imagenet specifications
+    x -= MEAN
+    x /= STD
     return x
 
 
 def read_mask(path: Any) -> Any:
     path = path.decode()
-    x = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-    x = x / 255.0  # normalizing the mask
-    x = x.astype(np.float32)
+    x = cv2.imread(path, cv2.IMREAD_GRAYSCALE).astype(np.float32)
+    x = x / 255.0  # normalizing mask
     x = np.expand_dims(x, axis=-1)
     return x
 

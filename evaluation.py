@@ -6,13 +6,21 @@ import traceback
 import numpy as np
 import cv2
 import pandas as pd
-from typing import Any
 from tqdm import tqdm
 import tensorflow as tf
 from keras.utils import CustomObjectScope
 from keras.models import load_model
-from sklearn.metrics import accuracy_score, f1_score, jaccard_score, precision_score, recall_score
-from metrics import dice_loss, dice_coef, iou
+from metrics import (
+    iou as model_iou,
+    dice_loss,
+    dice_coef,
+    eval_iou,
+    eval_dice_coef,
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+)
 from utils import loadData, createDir, getMaskLen, saveResults
 
 H = 256
@@ -36,7 +44,7 @@ def evaluator(eval_dir: str) -> None:
 
     createDir("eval_results")
 
-    with CustomObjectScope({"iou": iou, "dice_coef": dice_coef, "dice_loss": dice_loss}):
+    with CustomObjectScope({"iou": model_iou, "dice_coef": dice_coef, "dice_loss": dice_loss}):
         model = load_model("./output/model.h5")
 
     try:
@@ -71,19 +79,21 @@ def evaluator(eval_dir: str) -> None:
         mask = mask.flatten()
         y_pred = y_pred.flatten()
 
-        acc_scr = accuracy_score(mask, y_pred)
-        f1_scr = f1_score(mask, y_pred, labels=[0, 1], average="micro")
-        jac_scr = jaccard_score(mask, y_pred, labels=[0, 1], average="micro")
-        recall_val = recall_score(mask, y_pred, labels=[0, 1], average="micro")
-        precison_val = precision_score(mask, y_pred, labels=[0, 1], average="micro")
+        acc_scr = accuracy_score(y_pred=y_pred, y_true=mask)
+        f1_scr = f1_score(y_pred=y_pred, y_true=mask)
+        recall_val = recall_score(y_pred=y_pred, y_true=mask)
+        precison_val = precision_score(y_pred=y_pred, y_true=mask)
+        iou = eval_iou(y_pred=y_pred, y_true=mask)
+        dice = eval_dice_coef(y_pred=y_pred, y_true=mask)
         SCORE.append(
             [
                 name,
                 acc_scr,
                 f1_scr,
-                jac_scr,
                 recall_val,
                 precison_val,
+                iou,
+                dice,
                 diagonal_len,
                 horizontal_len,
                 vertical_len,
