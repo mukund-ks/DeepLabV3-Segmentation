@@ -88,8 +88,8 @@ def trainer(
     model_path = os.path.join(files_dir, "model.h5")
     csv_path = os.path.join(files_dir, "Epoch_Log.csv")
 
-    train_path = os.path.join("./new_data", "Train")
-    val_path = os.path.join("./new_data", "Test")
+    train_path = os.path.join("./augmented_data_ews", "Train")
+    val_path = os.path.join("./augmented_data_ews", "Test")
 
     x_train, y_train = loadData(train_path)
     x_train, y_train = shuffling(x_train, y_train)
@@ -102,8 +102,11 @@ def trainer(
     val_dataset = tf_dataset(x_val, y_val, batch=batches)
 
     model = createModel(shape=(H, W, 3), modelType=modelType)
+
+    loss_fn = dice_loss(model=model)
+
     model.compile(
-        loss=dice_loss,
+        loss=loss_fn,
         optimizer=Adam(LR),
         metrics=[dice_coef, iou, Recall(), Precision(), Accuracy()],
     )
