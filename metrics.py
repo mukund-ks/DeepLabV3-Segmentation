@@ -23,8 +23,10 @@ def dice_coef(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     return (2.0 * intersection + SMOOTH) / (tf.reduce_sum(y_true) + tf.reduce_sum(y_pred) + SMOOTH)
 
 
-def dice_loss(y_true: np.ndarray, y_pred: np.ndarray) -> float:
-    return 1.0 - dice_coef(y_true, y_pred)
+def dice_loss(y_true: np.ndarray, y_pred: np.ndarray, l2_weight: float = 1e-8) -> float:
+    dice = dice_coef(y_true, y_pred)
+    l2_loss = tf.add_n([l2_weight * tf.nn.l2_loss(var) for var in tf.trainable_variables()])
+    return 1.0 - dice + l2_loss
 
 
 # Evaluation Metrics

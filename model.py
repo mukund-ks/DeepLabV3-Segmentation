@@ -44,14 +44,12 @@ def squeeze_and_excite(inputs: KerasTensor, ratio: int = 8) -> KerasTensor:
         filters // ratio,
         activation="relu",
         kernel_initializer="he_normal",
-        kernel_regularizer=l2(1e-4),
         use_bias=False,
     )(se)
     se = Dense(
         filters,
         activation="sigmoid",
         kernel_initializer="he_normal",
-        kernel_regularizer=l2(1e-4),
         use_bias=False,
     )(se)
 
@@ -70,35 +68,62 @@ def ASPP(inputs: KerasTensor) -> KerasTensor:
     """
     shape = inputs.shape
     y1 = AveragePooling2D(pool_size=(shape[1], shape[2]))(inputs)
-    y1 = Conv2D(256, 1, padding="same", use_bias=False)(y1)
+    y1 = Conv2D(256, 1, padding="same", use_bias=False, kernel_initializer="he_normal")(y1)
     y1 = BatchNormalization()(y1)
     y1 = Activation("relu")(y1)
     y1 = UpSampling2D((shape[1], shape[2]), interpolation="bilinear")(y1)
 
     # 1x1 Convolution
-    y2 = Conv2D(256, 1, padding="same", use_bias=False)(inputs)
+    y2 = Conv2D(
+        256, 
+        1, 
+        padding="same", 
+        use_bias=False, 
+        kernel_initializer="he_normal"
+    )(inputs)
     y2 = BatchNormalization()(y2)
     # y2 = Dropout(0.5)(y2)
     y2 = Activation("relu")(y2)
 
     # 3x3 Convolution, Dilation Rate - 12 or 6
-    y3 = Conv2D(256, 3, padding="same", dilation_rate=6, use_bias=False)(inputs)
+    y3 = Conv2D(
+        256, 
+        3, 
+        padding="same", 
+        dilation_rate=6,
+        use_bias=False,
+        kernel_initializer="he_normal"
+    )(inputs)
     y3 = BatchNormalization()(y3)
     y3 = Activation("relu")(y3)
 
     # 3x3 Convolution, Dilation Rate - 24 or 12
-    y4 = Conv2D(256, 3, padding="same", dilation_rate=12, use_bias=False)(inputs)
+    y4 = Conv2D(
+        256, 
+        3, 
+        padding="same", 
+        dilation_rate=12, 
+        use_bias=False, 
+        kernel_initializer="he_normal"
+    )(inputs)
     y4 = BatchNormalization()(y4)
     y4 = Activation("relu")(y4)
 
     # 3x3 Convolution, Dilation Rate - 36 or 18
-    y5 = Conv2D(256, 3, padding="same", dilation_rate=18, use_bias=False)(inputs)
+    y5 = Conv2D(
+        256, 
+        3,
+        padding="same",
+        dilation_rate=18,
+        use_bias=False,
+        kernel_initializer="he_normal"
+    )(inputs)
     y5 = BatchNormalization()(y5)
     y5 = Activation("relu")(y5)
 
     # 1x1 Convolution on the concatenated Feature Map
     y = Concatenate()([y1, y2, y3, y4, y5])
-    y = Conv2D(256, 1, padding="same", use_bias=False)(y)
+    y = Conv2D(256, 1, padding="same", use_bias=False, kernel_initializer="he_normal")(y)
     y = BatchNormalization()(y)
     y = Activation("relu")(y)
 
@@ -139,6 +164,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
         kernel_size=1,
         padding="same",
         use_bias=False,
+        kernel_initializer="he_normal"
     )(x_b)
     x_b = BatchNormalization()(x_b)
     x_b = Activation("relu")(x_b)
@@ -154,6 +180,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
         kernel_size=3,
         padding="same",
         use_bias=False,
+        kernel_initializer="he_normal"
     )(x)
     x = BatchNormalization()(x)
     x = Activation("relu")(x)
@@ -165,6 +192,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
         kernel_size=3,
         padding="same",
         use_bias=False,
+        kernel_initializer="he_normal"
     )(x)
     x = BatchNormalization()(x)
     # x = Dropout(0.5)(x)
