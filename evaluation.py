@@ -60,10 +60,12 @@ def evaluator(eval_dir: str) -> None:
         name = os.path.split(x)[1].split(".")[0]
 
         image = cv2.imread(x, cv2.IMREAD_COLOR)
-        x = image / 255.0
+        image_resized = cv2.resize(image, dsize=(256, 256))
+        x = image_resized / 255.0
         x = np.expand_dims(x, axis=0)
 
         mask = cv2.imread(y, cv2.IMREAD_GRAYSCALE)
+        mask_resized = cv2.resize(mask, dsize=(256, 256))
 
         y_pred = model.predict(x)[0]
         y_pred = np.squeeze(y_pred, axis=-1)
@@ -74,17 +76,17 @@ def evaluator(eval_dir: str) -> None:
 
         save_img_path = f"./eval_results/{name}.png"
 
-        saveResults(image, mask, y_pred, save_img_path)
+        saveResults(image_resized, mask_resized, y_pred, save_img_path)
 
-        mask = mask.flatten()
+        mask_resized = mask_resized.flatten()
         y_pred = y_pred.flatten()
 
-        acc_scr = accuracy_score(y_pred=y_pred, y_true=mask)
-        f1_scr = f1_score(y_pred=y_pred, y_true=mask)
-        recall_val = recall_score(y_pred=y_pred, y_true=mask)
-        precison_val = precision_score(y_pred=y_pred, y_true=mask)
-        iou = eval_iou(y_pred=y_pred, y_true=mask)
-        dice = eval_dice_coef(y_pred=y_pred, y_true=mask)
+        acc_scr = accuracy_score(y_pred=y_pred, y_true=mask_resized)
+        f1_scr = f1_score(y_pred=y_pred, y_true=mask_resized)
+        recall_val = recall_score(y_pred=y_pred, y_true=mask_resized)
+        precison_val = precision_score(y_pred=y_pred, y_true=mask_resized)
+        iou = eval_iou(y_pred=y_pred, y_true=mask_resized)
+        dice = eval_dice_coef(y_pred=y_pred, y_true=mask_resized)
         SCORE.append(
             [
                 name,
@@ -100,13 +102,14 @@ def evaluator(eval_dir: str) -> None:
             ]
         )
 
-    score = [s[1:6] for s in SCORE]
+    score = [s[1:7] for s in SCORE]
     score = np.mean(score, axis=0)
     print(f"Accuracy: {score[0]:0.5f}")
     print(f"F1-Score: {score[1]:0.5f}")
-    print(f"Jaccard-Score: {score[2]:0.5f}")
-    print(f"Recall: {score[3]:0.5f}")
-    print(f"Precison: {score[4]:0.5f}")
+    print(f"Recall: {score[2]:0.5f}")
+    print(f"Precison: {score[3]:0.5f}")
+    print(f"IoU: {score[4]:0.5f}")
+    print(f"Dice Coefficient: {score[5]:0.5f}")
 
     df = pd.DataFrame(
         SCORE,
@@ -114,9 +117,10 @@ def evaluator(eval_dir: str) -> None:
             "Image",
             "Accuracy",
             "F1",
-            "Jaccard",
             "Recall",
             "Precison",
+            "IoU",
+            "Dice Coeff",
             "Diagonal Length (px)",
             "Horizontal Length (px)",
             "Vertical Length (px)",
@@ -128,4 +132,4 @@ def evaluator(eval_dir: str) -> None:
 
 
 if __name__ == "__main__":
-    evaluator(eval_dir="./eval_data")
+    evaluator(eval_dir="./new_data")
