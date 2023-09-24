@@ -26,6 +26,9 @@ from utils import loadData, createDir, getMaskLen, saveResults
 H = 256
 W = 256
 
+MEAN = [0.485, 0.456, 0.406]
+STD = [0.229, 0.224, 0.225]
+
 
 def evaluator(eval_dir: str) -> None:
     """Function to evaluate the trained model.
@@ -62,6 +65,8 @@ def evaluator(eval_dir: str) -> None:
         image = cv2.imread(x, cv2.IMREAD_COLOR)
         image_resized = cv2.resize(image, dsize=(256, 256))
         x = image_resized / 255.0
+        x -= MEAN
+        x /= STD
         x = np.expand_dims(x, axis=0)
 
         mask = cv2.imread(y, cv2.IMREAD_GRAYSCALE)
@@ -132,4 +137,4 @@ def evaluator(eval_dir: str) -> None:
 
 
 if __name__ == "__main__":
-    evaluator(eval_dir="./new_data")
+    evaluator(eval_dir="./eval_data")
