@@ -12,7 +12,7 @@ from keras.utils import CustomObjectScope
 from keras.models import load_model
 from metrics import (
     iou as model_iou,
-    dice_loss,
+    calc_loss,
     dice_coef,
     eval_iou,
     eval_dice_coef,
@@ -44,7 +44,7 @@ def evaluator(eval_dir: str) -> None:
 
     createDir("eval_results")
 
-    with CustomObjectScope({"iou": model_iou, "dice_coef": dice_coef, "dice_loss": dice_loss}):
+    with CustomObjectScope({"iou": model_iou, "dice_coef": dice_coef, "dice_loss": calc_loss}):
         model = load_model("./output/model.h5")
 
     try:

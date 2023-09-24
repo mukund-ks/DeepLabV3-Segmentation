@@ -16,7 +16,7 @@ from keras.callbacks import (
 from keras.optimizers import Adam
 from keras.metrics import Recall, Precision, Accuracy
 from model import createModel
-from metrics import dice_loss, dice_coef, iou
+from metrics import calc_loss, dice_coef, iou
 from utils import createDir, loadData, shuffling
 from typing import Any
 
@@ -103,7 +103,7 @@ def trainer(
 
     model = createModel(shape=(H, W, 3), modelType=modelType)
 
-    loss_fn = dice_loss(model=model)
+    loss_fn = calc_loss(model=model)
 
     model.compile(
         loss=loss_fn,
