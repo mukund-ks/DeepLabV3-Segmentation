@@ -74,49 +74,28 @@ def ASPP(inputs: KerasTensor) -> KerasTensor:
     y1 = UpSampling2D((shape[1], shape[2]), interpolation="bilinear")(y1)
 
     # 1x1 Convolution
-    y2 = Conv2D(
-        256, 
-        1, 
-        padding="same", 
-        use_bias=False, 
-        kernel_initializer="he_normal"
-    )(inputs)
+    y2 = Conv2D(256, 1, padding="same", use_bias=False, kernel_initializer="he_normal")(inputs)
     y2 = BatchNormalization()(y2)
     # y2 = Dropout(0.5)(y2)
     y2 = Activation("relu")(y2)
 
     # 3x3 Convolution, Dilation Rate - 12 or 6
     y3 = Conv2D(
-        256, 
-        3, 
-        padding="same", 
-        dilation_rate=6,
-        use_bias=False,
-        kernel_initializer="he_normal"
+        256, 3, padding="same", dilation_rate=6, use_bias=False, kernel_initializer="he_normal"
     )(inputs)
     y3 = BatchNormalization()(y3)
     y3 = Activation("relu")(y3)
 
     # 3x3 Convolution, Dilation Rate - 24 or 12
     y4 = Conv2D(
-        256, 
-        3, 
-        padding="same", 
-        dilation_rate=12, 
-        use_bias=False, 
-        kernel_initializer="he_normal"
+        256, 3, padding="same", dilation_rate=12, use_bias=False, kernel_initializer="he_normal"
     )(inputs)
     y4 = BatchNormalization()(y4)
     y4 = Activation("relu")(y4)
 
     # 3x3 Convolution, Dilation Rate - 36 or 18
     y5 = Conv2D(
-        256, 
-        3,
-        padding="same",
-        dilation_rate=18,
-        use_bias=False,
-        kernel_initializer="he_normal"
+        256, 3, padding="same", dilation_rate=18, use_bias=False, kernel_initializer="he_normal"
     )(inputs)
     y5 = BatchNormalization()(y5)
     y5 = Activation("relu")(y5)
@@ -142,12 +121,15 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
     """
     inputs = Input(shape)  # instantiating a tensor
 
-    if modelType == "ResNet101":
-        encoder = ResNet101(weights="imagenet", include_top=False, input_tensor=inputs)
-    else:
-        encoder = ResNet50(weights="imagenet", include_top=False, input_tensor=inputs)
+    encoder = (
+        ResNet101(weights="imagenet", include_top=False, input_tensor=inputs)
+        if modelType == "ResNet101"
+        else ResNet50(weights="imagenet", include_top=False, input_tensor=inputs)
+    )
 
-    image_features = encoder.get_layer("conv4_block6_out").output
+    image_features = encoder.get_layer(
+        "conv4_block23_out" if modelType == "ResNet101" else "conv4_block6_out"
+    ).output
 
     # High-Level Features
     x_a = ASPP(image_features)
@@ -160,11 +142,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
 
     # 1x1 Convolution on Low-Level Features
     x_b = Conv2D(
-        filters=48,
-        kernel_size=1,
-        padding="same",
-        use_bias=False,
-        kernel_initializer="he_normal"
+        filters=48, kernel_size=1, padding="same", use_bias=False, kernel_initializer="he_normal"
     )(x_b)
     x_b = BatchNormalization()(x_b)
     x_b = Activation("relu")(x_b)
@@ -176,11 +154,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
 
     # 3x3 Convolution on Concatenated Map
     x = Conv2D(
-        filters=256,
-        kernel_size=3,
-        padding="same",
-        use_bias=False,
-        kernel_initializer="he_normal"
+        filters=256, kernel_size=3, padding="same", use_bias=False, kernel_initializer="he_normal"
     )(x)
     x = BatchNormalization()(x)
     x = Activation("relu")(x)
@@ -188,11 +162,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
 
     # 3x3 Convolution on Concatenated Map
     x = Conv2D(
-        filters=256,
-        kernel_size=3,
-        padding="same",
-        use_bias=False,
-        kernel_initializer="he_normal"
+        filters=256, kernel_size=3, padding="same", use_bias=False, kernel_initializer="he_normal"
     )(x)
     x = BatchNormalization()(x)
     # x = Dropout(0.5)(x)
