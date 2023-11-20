@@ -1,3 +1,7 @@
+import os
+import numpy as np
+import cv2
+import tensorflow as tf
 from model import createModel
 from utils import splitData, shuffling
 from train import tf_dataset
@@ -8,19 +12,15 @@ from keras.callbacks import (
     ReduceLROnPlateau,
     EarlyStopping,
     TensorBoard,
+    Callback,
 )
 from keras.optimizers import Adam
 from keras.metrics import Recall, Precision, Accuracy
-from keras.callbacks import Callback
-import os
-import numpy as np
-import cv2
-
 
 BATCH = 8
 N_MODELS = 4
 LR = 1e-4
-EPOCH = 50
+EPOCH = 5
 MEAN = [0.485, 0.456, 0.406]
 STD = [0.229, 0.224, 0.225]
 
@@ -45,16 +45,18 @@ class IoUThresholdCallback(Callback):
         low_iou_indices = []
 
         for idx, (x, y) in enumerate(zip(x_val, y_val)):
-            image = cv2.imread(x, cv2.IMREAD_COLOR)
-            image /= 255.0
-            image -= MEAN
-            image /= STD
-            image = np.expand_dims(image, axis=0)
+            image = cv2.imread(x, cv2.IMREAD_COLOR).astype(np.float32)
+            image_resized = cv2.resize(image, dsize=(256, 256, 3))
+            image_resized = image_resized / 255.0
+            image_resized -= MEAN
+            image_resized /= STD
+            image_resized = np.expand_dims(image_resized, axis=0)
 
-            mask = cv2.imread(y, cv2.IMREAD_GRAYSCALE)
-            mask_flatten = mask.flatten()
+            mask = cv2.imread(y, cv2.IMREAD_GRAYSCALE).astype(np.float32)
+            mask_resized = cv2.resize(mask, dsize=(256, 256, 1))
+            mask_flatten = mask_resized.flatten()
 
-            y_pred = model.predict(image)[0]
+            y_pred = model.predict(image_resized)[0]
             y_pred = np.squeeze(y_pred, axis=-1)
             y_pred = y_pred > 0.5
             y_pred = y_pred.astype(np.int32)
@@ -69,13 +71,14 @@ class IoUThresholdCallback(Callback):
                     "tmp", "data", "Mask", f"tmp_img_{idx}_mask_{self.model_n}.png"
                 )
                 cv2.imwrite(img_path, image)
-                cv2.imwrite(mask_path, mask)
+                cv2.imwrite(mask_path, mask_resized)
 
         print(f"Examples with IoU < {self.threshold} on last epoch: {len(low_iou_indices)}")
         return
 
 
 for i in range(N_MODELS):
+    tf.keras.backend.clear_session()
     weights_path = os.path.join("tmp", "weights", f"model_{i-1}.h5")
     weights_save_path = os.path.join("tmp", "weights", f"model_{i}.h5")
     log_path = os.path.join("tmp", "logs", f"model_{i}_epoch_log.csv")
@@ -85,6 +88,9 @@ for i in range(N_MODELS):
 
     train_dataset = tf_dataset(x_train, y_train, batch=BATCH)
     val_dataset = tf_dataset(x_val, y_val, batch=BATCH)
+
+    print(f"Train Size: {len(x_train)}")
+    print(f"Validation Size: {len(x_val)}")
 
     model = createModel(modelType)
 
@@ -110,3 +116,5 @@ for i in range(N_MODELS):
 
     print(f"Training Model_{i}....")
     model.fit(train_dataset, epochs=EPOCH, validation_data=val_dataset, callbacks=callbacks)
+
+print("Ensemble Training Done!")
