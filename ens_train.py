@@ -19,7 +19,8 @@ from keras.metrics import Recall, Precision, Accuracy
 
 BATCH = 8
 N_MODELS = 4
-LR = 1e-4
+INITIAL_LR = 1e-4
+REDUCTION_FACTOR = 2
 EPOCH = 5
 MEAN = [0.485, 0.456, 0.406]
 STD = [0.229, 0.224, 0.225]
@@ -35,10 +36,10 @@ data_path = os.path.join("tmp", "data")
 
 
 class IoUThresholdCallback(Callback):
-    def __init__(self, model, model_n, threshold):
+    def __init__(self, model, model_idx, threshold):
         super().__init__()
         self.model = model
-        self.model_n = model_n
+        self.model_idx = model_idx
         self.threshold = threshold
 
     def on_train_end(self, logs=None):
@@ -66,22 +67,22 @@ class IoUThresholdCallback(Callback):
 
             if iou < self.threshold:
                 low_iou_indices.append(idx)
-                img_path = os.path.join("tmp", "data", "Image", f"tmp_img_{idx}_{self.model_n}.png")
-                mask_path = os.path.join(
-                    "tmp", "data", "Mask", f"tmp_img_{idx}_mask_{self.model_n}.png"
-                )
-                cv2.imwrite(img_path, image)
-                cv2.imwrite(mask_path, mask_resized)
+                for i in range(5):
+                    save_idx = f"{idx}_{self.model_idx}_{i}"
+                    img_path = os.path.join("tmp", "data", "Image", f"tmp_img_{save_idx}.png")
+                    mask_path = os.path.join("tmp", "data", "Mask", f"tmp_img_{save_idx}_mask.png")
+                    cv2.imwrite(img_path, image)
+                    cv2.imwrite(mask_path, mask_resized)
 
         print(f"Examples with IoU < {self.threshold} on last epoch: {len(low_iou_indices)}")
         return
 
 
-for i in range(N_MODELS):
+for model_idx in range(1, N_MODELS + 1):
     tf.keras.backend.clear_session()
-    weights_path = os.path.join("tmp", "weights", f"model_{i-1}.h5")
-    weights_save_path = os.path.join("tmp", "weights", f"model_{i}.h5")
-    log_path = os.path.join("tmp", "logs", f"model_{i}_epoch_log.csv")
+    weights_path = os.path.join("tmp", "weights", f"model_{model_idx-1}.h5")
+    weights_save_path = os.path.join("tmp", "weights", f"model_{model_idx}.h5")
+    log_path = os.path.join("tmp", "logs", f"model_{model_idx}_epoch_log.csv")
 
     x_train, y_train, x_val, y_val = splitData(data_path)
     x_train, y_train = shuffling(x_train, y_train)
@@ -94,15 +95,15 @@ for i in range(N_MODELS):
 
     model = createModel(modelType)
 
-    if os.path.exists(weights_path):
-        print(f"Weights of Model_{i-1} found!\nLoading weights in Model_{i}")
+    if os.path.isfile(weights_path):
+        print(f"Weights of Model_{model_idx-1} found!\nLoading weights in Model_{model_idx}")
         model.load_weights(weights_path, by_name=True)
 
     loss_fn = calc_loss(model=model)
 
     model.compile(
         loss=loss_fn,
-        optimizer=Adam(LR),
+        optimizer=Adam(INITIAL_LR / (2 ** (model_idx - 1))),
         metrics=[dice_coef, iou, Recall(), Precision(), Accuracy()],
     )
 
@@ -111,10 +112,10 @@ for i in range(N_MODELS):
         ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=5, min_lr=1e-8, verbose=1),
         CSVLogger(log_path),
         TensorBoard(),
-        IoUThresholdCallback(model=model, model_n=i, threshold=0.7),
+        IoUThresholdCallback(model=model, model_idx=model_idx, threshold=0.7),
     ]
 
-    print(f"Training Model_{i}....")
+    print(f"Training Model_{model_idx}....")
     model.fit(train_dataset, epochs=EPOCH, validation_data=val_dataset, callbacks=callbacks)
 
 print("Ensemble Training Done!")
