@@ -21,7 +21,7 @@ from keras.layers import (
 from keras.models import Model
 from keras.applications import ResNet50, ResNet101
 from keras.regularizers import l2
-from keras.engine.keras_tensor import KerasTensor
+from tensorflow.python.keras.engine.keras_tensor import KerasTensor
 
 
 def squeeze_and_excite(inputs: KerasTensor, ratio: int = 8) -> KerasTensor:
