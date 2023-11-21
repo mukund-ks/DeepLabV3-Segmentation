@@ -9,6 +9,8 @@ STD = [0.229, 0.224, 0.225]
 
 
 class IoUThresholdCallback(Callback):
+    """Custom Callback to calculate IoU on validation dataset on final epoch and save poor performing examples.
+    """
     def __init__(self, model, model_idx, x_val, y_val, threshold):
         super().__init__()
         self.model = model

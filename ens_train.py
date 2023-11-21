@@ -1,4 +1,5 @@
 import os
+import click
 import tensorflow as tf
 from model import createModel
 from utils import splitData, shuffling
@@ -15,67 +16,150 @@ from keras.callbacks import (
 from keras.optimizers import Adam
 from keras.metrics import Recall, Precision, Accuracy
 
-os.makedirs("tmp/weights", exist_ok=True)
-os.makedirs("tmp/data/Image", exist_ok=True)
-os.makedirs("tmp/data/Mask", exist_ok=True)
-os.makedirs("tmp/logs", exist_ok=True)
 
-BATCH = 8
-N_MODELS = 4
-EPOCH = 50
+@click.command()
+@click.option(
+    "N",
+    "--n-models",
+    prompt="No. of Models",
+    type=int,
+    default=4,
+    help="No. of Models in Ensemble. Defaults to 4.",
+)
+@click.option(
+    "E",
+    "--epochs",
+    prompt="Epochs",
+    type=int,
+    default=60,
+    help="Epochs to train each model for. Defaults to 60.",
+)
+@click.option(
+    "B",
+    "--batches",
+    prompt="Batches",
+    type=int,
+    default=8,
+    help="Batch size for data. Defaults to 8.",
+)
+@click.option(
+    "L",
+    "--initial-lr",
+    prompt="Initial LR",
+    type=float,
+    default=1e-4,
+    help="Initial Learning Rate for training. Defaults to 1e-4.",
+)
+@click.option(
+    "--iou-threshold",
+    prompt="IoU Threshold",
+    type=float,
+    default=0.7,
+    help="Starting threshold for IoU. Defaults to 0.7.",
+)
+@click.option(
+    "--max-threshold",
+    prompt="Max IoU Threshold",
+    type=float,
+    default=0.95,
+    help="Maximum threshold for IoU. Defaults to 0.95.",
+)
+@click.option(
+    "--scale-factor",
+    prompt="IoU Threshold Scale Factor",
+    type=float,
+    default=0.05,
+    help="Scaling factor for IoU threshold. Defaults to 0.05.",
+)
+def ens_trainer(
+    n_models: int,
+    epochs: int,
+    batches: int,
+    initial_lr: float,
+    iou_threshold: float,
+    max_threshold: float,
+    scale_factor: float,
+) -> None:
+    """Ensemble Trainer script for DeepLabV3+ Model with ResNet50 backbone. The script trains a specified number of models, loads previous model's weights into subsequent models and keeps track of poor performing examples in the validation dataset (through IoU Threshold). Learning Rate and IoU Threshold are adjusted for each model during loop.
 
-threshold = 0.7
-max_threshold = 0.95
-scale_factor = 0.05
+    Args:
+        n_models (int): No. of Models in Ensemble
+        epochs (int): Epochs to train each model for
+        batches (int): Batch size for data
+        initial_lr (float): Initial Learning Rate for training
+        iou_threshold (float): Starting threshold for IoU
+        max_threshold (float): Maximum threshold for IoU
+        scale_factor (float): Scaling factor for IoU threshold
 
-initial_lr = 1e-4
+    Raises:
+        OSError: In case Data Path (./tmp/data) does not exist.
+    """
+    os.makedirs("tmp/weights", exist_ok=True)
+    os.makedirs("tmp/logs", exist_ok=True)
 
-data_path = os.path.join("tmp", "data")
+    data_path = os.path.join("tmp", "data")
 
-for model_idx in range(1, N_MODELS + 1):
-    tf.keras.backend.clear_session()
-    weights_path = os.path.join("tmp", "weights", f"model_{model_idx-1}.h5")
-    weights_save_path = os.path.join("tmp", "weights", f"model_{model_idx}.h5")
-    log_path = os.path.join("tmp", "logs", f"model_{model_idx}_epoch_log.csv")
+    if not os.path.exists(data_path):
+        raise OSError(f"Data Dir: {data_path} does not exist.")
 
-    x_train, y_train, x_val, y_val = splitData(data_path)
-    x_train, y_train = shuffling(x_train, y_train)
+    for model_idx in range(1, n_models + 1):
+        tf.keras.backend.clear_session()
+        weights_path = os.path.join("tmp", "weights", f"model_{model_idx-1}.h5")
+        weights_save_path = os.path.join("tmp", "weights", f"model_{model_idx}.h5")
+        log_path = os.path.join("tmp", "logs", f"model_{model_idx}_epoch_log.csv")
 
-    train_dataset = tf_dataset(x_train, y_train, batch=BATCH)
-    val_dataset = tf_dataset(x_val, y_val, batch=BATCH)
+        x_train, y_train, x_val, y_val = splitData(data_path)
+        x_train, y_train = shuffling(x_train, y_train)
 
-    print(f"Train Size: {len(x_train)}")
-    print(f"Validation Size: {len(x_val)}")
+        train_dataset = tf_dataset(x_train, y_train, batch=batches)
+        val_dataset = tf_dataset(x_val, y_val, batch=batches)
 
-    model = createModel("ResNet50")
+        click.secho(f"Train Size: {len(x_train)}", fg="green")
+        click.secho(f"Validation Size: {len(x_val)}", fg="green")
 
-    if os.path.isfile(weights_path):
-        print(f"Weights of Model_{model_idx-1} found!\nLoading weights in Model_{model_idx}")
-        model.load_weights(weights_path, by_name=True)
+        model = createModel("ResNet50")
 
-    loss_fn = calc_loss(model=model)
+        if os.path.isfile(weights_path):
+            click.secho(
+                f"Weights of Model_{model_idx-1} found!\nLoading weights in Model_{model_idx} 👍",
+                fg="green",
+            )
+            model.load_weights(weights_path, by_name=True)
 
-    model.compile(
-        loss=loss_fn,
-        optimizer=Adam(initial_lr / (2 ** (model_idx - 1))),
-        metrics=[dice_coef, iou, Recall(), Precision(), Accuracy()],
-    )
+        loss_fn = calc_loss(model=model)
 
-    threshold = min(threshold + scale_factor, max_threshold)
+        model.compile(
+            loss=loss_fn,
+            optimizer=Adam(initial_lr / (2 ** (model_idx - 1))),
+            metrics=[dice_coef, iou, Recall(), Precision(), Accuracy()],
+        )
 
-    print(f"Threshold for Model_{model_idx}: {threshold}")
+        click.secho(f"Threshold for Model_{model_idx}: {iou_threshold}", fg="blue")
 
-    callbacks = [
-        ModelCheckpoint(weights_save_path, verbose=1, save_best_only=True, save_weights_only=True),
-        ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=5, min_lr=1e-8, verbose=1),
-        CSVLogger(log_path),
-        TensorBoard(),
-        IoUThresholdCallback(
-            model=model, model_idx=model_idx, x_val=x_val, y_val=y_val, threshold=threshold
-        ),
-    ]
+        callbacks = [
+            ModelCheckpoint(
+                weights_save_path, verbose=1, save_best_only=True, save_weights_only=True
+            ),
+            ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=5, min_lr=1e-8, verbose=1),
+            CSVLogger(log_path),
+            TensorBoard(),
+            IoUThresholdCallback(
+                model=model,
+                model_idx=model_idx,
+                x_val=x_val,
+                y_val=y_val,
+                threshold=iou_threshold,
+            ),
+        ]
 
-    print(f"Training Model_{model_idx}....")
-    model.fit(train_dataset, epochs=EPOCH, validation_data=val_dataset, callbacks=callbacks)
+        click.secho(f"Training Model_{model_idx}....", fg="blue")
+        model.fit(train_dataset, epochs=epochs, validation_data=val_dataset, callbacks=callbacks)
 
-print("Ensemble Training Done!")
+        iou_threshold = min(iou_threshold + scale_factor, max_threshold)
+
+    click.secho("Ensemble Training Done!", fg="green")
+    return
+
+
+if __name__ == "__main__":
+    ens_trainer()
