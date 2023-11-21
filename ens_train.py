@@ -21,7 +21,6 @@ from keras.metrics import Recall, Precision, Accuracy
 @click.option(
     "N",
     "--n-models",
-    prompt="No. of Models",
     type=int,
     default=4,
     help="No. of Models in Ensemble. Defaults to 4.",
@@ -29,7 +28,6 @@ from keras.metrics import Recall, Precision, Accuracy
 @click.option(
     "E",
     "--epochs",
-    prompt="Epochs",
     type=int,
     default=60,
     help="Epochs to train each model for. Defaults to 60.",
@@ -37,7 +35,6 @@ from keras.metrics import Recall, Precision, Accuracy
 @click.option(
     "B",
     "--batches",
-    prompt="Batches",
     type=int,
     default=8,
     help="Batch size for data. Defaults to 8.",
@@ -45,28 +42,24 @@ from keras.metrics import Recall, Precision, Accuracy
 @click.option(
     "L",
     "--initial-lr",
-    prompt="Initial LR",
     type=float,
     default=1e-4,
     help="Initial Learning Rate for training. Defaults to 1e-4.",
 )
 @click.option(
     "--iou-threshold",
-    prompt="IoU Threshold",
     type=float,
     default=0.7,
     help="Starting threshold for IoU. Defaults to 0.7.",
 )
 @click.option(
     "--max-threshold",
-    prompt="Max IoU Threshold",
     type=float,
     default=0.95,
     help="Maximum threshold for IoU. Defaults to 0.95.",
 )
 @click.option(
     "--scale-factor",
-    prompt="IoU Threshold Scale Factor",
     type=float,
     default=0.05,
     help="Scaling factor for IoU threshold. Defaults to 0.05.",
