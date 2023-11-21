@@ -24,14 +24,14 @@ class IoUThresholdCallback(Callback):
 
         for idx, (x, y) in enumerate(zip(self.x_val, self.y_val)):
             image = cv2.imread(x, cv2.IMREAD_COLOR).astype(np.float32)
-            image_resized = cv2.resize(image, dsize=(256, 256, 3))
+            image_resized = cv2.resize(image, dsize=(256, 256))
             image_resized = image_resized / 255.0
             image_resized -= MEAN
             image_resized /= STD
             image_resized = np.expand_dims(image_resized, axis=0)
 
             mask = cv2.imread(y, cv2.IMREAD_GRAYSCALE).astype(np.float32)
-            mask_resized = cv2.resize(mask, dsize=(256, 256, 1))
+            mask_resized = cv2.resize(mask, dsize=(256, 256))
             mask_flatten = mask_resized.flatten()
 
             y_pred = self.model.predict(image_resized)[0]

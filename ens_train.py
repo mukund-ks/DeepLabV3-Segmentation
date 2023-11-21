@@ -19,28 +19,24 @@ from keras.metrics import Recall, Precision, Accuracy
 
 @click.command()
 @click.option(
-    "N",
     "--n-models",
     type=int,
     default=4,
     help="No. of Models in Ensemble. Defaults to 4.",
 )
 @click.option(
-    "E",
     "--epochs",
     type=int,
     default=60,
     help="Epochs to train each model for. Defaults to 60.",
 )
 @click.option(
-    "B",
     "--batches",
     type=int,
     default=8,
     help="Batch size for data. Defaults to 8.",
 )
 @click.option(
-    "L",
     "--initial-lr",
     type=float,
     default=1e-4,
@@ -107,14 +103,13 @@ def ens_trainer(
         train_dataset = tf_dataset(x_train, y_train, batch=batches)
         val_dataset = tf_dataset(x_val, y_val, batch=batches)
 
-        click.secho(f"Train Size: {len(x_train)}", fg="green")
-        click.secho(f"Validation Size: {len(x_val)}", fg="green")
+        click.secho(f"Train Size: {len(x_train)}\nValidation Size: {len(x_val)}\n", fg="green")
 
         model = createModel("ResNet50")
 
         if os.path.isfile(weights_path):
             click.secho(
-                f"Weights of Model_{model_idx-1} found!\nLoading weights in Model_{model_idx} 👍",
+                f"Weights of Model_{model_idx-1} found!\nLoading weights in Model_{model_idx} 👍\n",
                 fg="green",
             )
             model.load_weights(weights_path, by_name=True)
@@ -127,7 +122,10 @@ def ens_trainer(
             metrics=[dice_coef, iou, Recall(), Precision(), Accuracy()],
         )
 
-        click.secho(f"Threshold for Model_{model_idx}: {iou_threshold}", fg="blue")
+        click.secho(
+            f"Threshold for Model_{model_idx}: {iou_threshold}\nLR for Model_{model_idx}: {initial_lr / (2 ** (model_idx - 1))}\n",
+            fg="blue",
+        )
 
         callbacks = [
             ModelCheckpoint(
@@ -145,7 +143,7 @@ def ens_trainer(
             ),
         ]
 
-        click.secho(f"Training Model_{model_idx}....", fg="blue")
+        click.secho(f"Training Model_{model_idx}....\n", fg="blue")
         model.fit(train_dataset, epochs=epochs, validation_data=val_dataset, callbacks=callbacks)
 
         iou_threshold = min(iou_threshold + scale_factor, max_threshold)
