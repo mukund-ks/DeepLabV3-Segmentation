@@ -1,82 +1,36 @@
 import os
-import numpy as np
-import cv2
 import tensorflow as tf
 from model import createModel
 from utils import splitData, shuffling
 from train import tf_dataset
-from metrics import calc_loss, dice_coef, iou, eval_iou
+from metrics import calc_loss, dice_coef, iou
+from custom_callbacks import IoUThresholdCallback
 from keras.callbacks import (
     ModelCheckpoint,
     CSVLogger,
     ReduceLROnPlateau,
     EarlyStopping,
     TensorBoard,
-    Callback,
 )
 from keras.optimizers import Adam
 from keras.metrics import Recall, Precision, Accuracy
-
-BATCH = 8
-N_MODELS = 4
-INITIAL_LR = 1e-4
-REDUCTION_FACTOR = 2
-EPOCH = 5
-MEAN = [0.485, 0.456, 0.406]
-STD = [0.229, 0.224, 0.225]
-
-modelType = "ResNet50"
 
 os.makedirs("tmp/weights", exist_ok=True)
 os.makedirs("tmp/data/Image", exist_ok=True)
 os.makedirs("tmp/data/Mask", exist_ok=True)
 os.makedirs("tmp/logs", exist_ok=True)
 
+BATCH = 8
+N_MODELS = 4
+EPOCH = 50
+
+threshold = 0.7
+max_threshold = 0.95
+scale_factor = 0.05
+
+initial_lr = 1e-4
+
 data_path = os.path.join("tmp", "data")
-
-
-class IoUThresholdCallback(Callback):
-    def __init__(self, model, model_idx, threshold):
-        super().__init__()
-        self.model = model
-        self.model_idx = model_idx
-        self.threshold = threshold
-
-    def on_train_end(self, logs=None):
-        low_iou_indices = []
-
-        for idx, (x, y) in enumerate(zip(x_val, y_val)):
-            image = cv2.imread(x, cv2.IMREAD_COLOR).astype(np.float32)
-            image_resized = cv2.resize(image, dsize=(256, 256, 3))
-            image_resized = image_resized / 255.0
-            image_resized -= MEAN
-            image_resized /= STD
-            image_resized = np.expand_dims(image_resized, axis=0)
-
-            mask = cv2.imread(y, cv2.IMREAD_GRAYSCALE).astype(np.float32)
-            mask_resized = cv2.resize(mask, dsize=(256, 256, 1))
-            mask_flatten = mask_resized.flatten()
-
-            y_pred = model.predict(image_resized)[0]
-            y_pred = np.squeeze(y_pred, axis=-1)
-            y_pred = y_pred > 0.5
-            y_pred = y_pred.astype(np.int32)
-            y_pred = y_pred.flatten()
-
-            iou = eval_iou(y_true=mask_flatten, y_pred=y_pred)
-
-            if iou < self.threshold:
-                low_iou_indices.append(idx)
-                for i in range(5):
-                    save_idx = f"{idx}_{self.model_idx}_{i}"
-                    img_path = os.path.join("tmp", "data", "Image", f"tmp_img_{save_idx}.png")
-                    mask_path = os.path.join("tmp", "data", "Mask", f"tmp_img_{save_idx}_mask.png")
-                    cv2.imwrite(img_path, image)
-                    cv2.imwrite(mask_path, mask_resized)
-
-        print(f"Examples with IoU < {self.threshold} on last epoch: {len(low_iou_indices)}")
-        return
-
 
 for model_idx in range(1, N_MODELS + 1):
     tf.keras.backend.clear_session()
@@ -93,7 +47,7 @@ for model_idx in range(1, N_MODELS + 1):
     print(f"Train Size: {len(x_train)}")
     print(f"Validation Size: {len(x_val)}")
 
-    model = createModel(modelType)
+    model = createModel("ResNet50")
 
     if os.path.isfile(weights_path):
         print(f"Weights of Model_{model_idx-1} found!\nLoading weights in Model_{model_idx}")
@@ -103,16 +57,22 @@ for model_idx in range(1, N_MODELS + 1):
 
     model.compile(
         loss=loss_fn,
-        optimizer=Adam(INITIAL_LR / (2 ** (model_idx - 1))),
+        optimizer=Adam(initial_lr / (2 ** (model_idx - 1))),
         metrics=[dice_coef, iou, Recall(), Precision(), Accuracy()],
     )
+
+    threshold = min(threshold + scale_factor, max_threshold)
+
+    print(f"Threshold for Model_{model_idx}: {threshold}")
 
     callbacks = [
         ModelCheckpoint(weights_save_path, verbose=1, save_best_only=True, save_weights_only=True),
         ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=5, min_lr=1e-8, verbose=1),
         CSVLogger(log_path),
         TensorBoard(),
-        IoUThresholdCallback(model=model, model_idx=model_idx, threshold=0.7),
+        IoUThresholdCallback(
+            model=model, model_idx=model_idx, x_val=x_val, y_val=y_val, threshold=threshold
+        ),
     ]
 
     print(f"Training Model_{model_idx}....")
