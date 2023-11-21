@@ -63,6 +63,11 @@ def splitData(path: str) -> list[str]:
     Returns:
         list[str]: Paths to images and masks.
     """
+    if not os.path.exists(os.path.join(path, "Image")) or not os.path.exists(
+        os.path.join(path, "Mask")
+    ):
+        raise OSError(f"Incomplete Data Directory: {path}")
+
     X = sorted(glob(os.path.join(path, "Image", "*.png")))
     Y = sorted(glob(os.path.join(path, "Mask", "*.png")))
 
