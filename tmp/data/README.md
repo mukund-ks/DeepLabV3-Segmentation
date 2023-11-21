@@ -1,0 +1,1 @@
+Data for Ensemble training here. Should contain two directories, "Image" and "Mask".
