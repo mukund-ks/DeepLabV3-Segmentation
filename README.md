@@ -17,6 +17,8 @@
 ## Table Of Contents
 
 - [Table Of Contents](#table-of-contents)
+- [Changelog](#changelog)
+  - [Ensemble Training \& Evaluation - 22/11/2023](#ensemble-training--evaluation---22112023)
 - [About The Project](#about-the-project)
 - [Working](#working)
   - [DeepLabV3+](#deeplabv3)
@@ -45,6 +47,16 @@
 - [Authors](#authors)
 - [Acknowledgements](#acknowledgements)
 - [To Cite this Repository](#to-cite-this-repository)
+
+## Changelog
+
+### Ensemble Training & Evaluation - 22/11/2023
+- Added support for ensemble training using a script that sequentially trains multiple models.
+- Ensemble evaluation script implemented for combining predictions from multiple models and computing ensemble metrics.
+- Introduced a custom callback to monitor IoU during training and save examples with IoU below a specified threshold.
+- Implemented a dynamic learning rate reduction for subsequent models during ensemble training.
+- Added a mechanism to scale the IoU threshold with each subsequent model, providing better adaptability.
+- Added scripts for cleaning up temporary files.
 
 ## About The Project
 
