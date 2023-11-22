@@ -58,6 +58,9 @@
 - Added a mechanism to scale the IoU threshold with each subsequent model, providing better adaptability.
 - Added scripts for cleaning up temporary files.
 
+> [!NOTE]
+> See [`ens_train.py`](https://github.com/mukund-ks/DeepLabV3-Segmentation/blob/main/ens_train.py) and [`ens_eval.py`](https://github.com/mukund-ks/DeepLabV3-Segmentation/blob/main/ens_eval.py)
+
 ## About The Project
 
 The goal of this research is to develop a DeepLabV3+ model with a choice of ResNet50 or ResNet101 backbone to perform binary segmentation on plant image datasets. Based on the presence or absence of a certain object or characteristic, binary segmentation entails splitting an image into discrete subgroups known as image segments which helps to simplify processing or analysis of the image by reducing the complexity of the image. Labeling pixels is another step in the segmentation process. Each pixel or piece of a picture assigned to the same category has a unique label. 
@@ -350,7 +353,7 @@ pip install -r requirements.txt
 > **Note**
 > You can deactivate the Virtual Environment by using
 > ```env/Scripts/deactivate```
- 
+
 
 ## Usage
 
