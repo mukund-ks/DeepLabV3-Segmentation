@@ -9,8 +9,8 @@ STD = [0.229, 0.224, 0.225]
 
 
 class IoUThresholdCallback(Callback):
-    """Custom Callback to calculate IoU on validation dataset on final epoch and save poor performing examples.
-    """
+    """Custom Callback to calculate IoU on validation dataset on final epoch and save poor performing examples."""
+
     def __init__(self, model, model_idx, x_val, y_val, threshold):
         super().__init__()
         self.model = model
@@ -18,6 +18,7 @@ class IoUThresholdCallback(Callback):
         self.x_val = x_val
         self.y_val = y_val
         self.threshold = threshold
+        return
 
     def on_train_end(self, logs=None):
         low_iou_indices = []
@@ -42,14 +43,15 @@ class IoUThresholdCallback(Callback):
 
             iou = eval_iou(y_true=mask_flatten, y_pred=y_pred)
 
+            print(f"Examples with IoU < {self.threshold} on last epoch: {len(low_iou_indices)}")
+
             if iou < self.threshold:
                 low_iou_indices.append(idx)
+                print("Saving temporary images and masks!\n")
                 for i in range(5):
                     save_idx = f"{idx}_{self.model_idx}_{i}"
                     img_path = os.path.join("tmp", "data", "Image", f"tmp_img_{save_idx}.png")
                     mask_path = os.path.join("tmp", "data", "Mask", f"tmp_img_{save_idx}_mask.png")
                     cv2.imwrite(img_path, image)
                     cv2.imwrite(mask_path, mask_resized)
-
-        print(f"Examples with IoU < {self.threshold} on last epoch: {len(low_iou_indices)}")
         return

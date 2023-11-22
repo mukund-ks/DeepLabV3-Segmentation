@@ -158,5 +158,5 @@ def tmp_cleanup() -> None:
             file_path = os.path.join("./tmp/data", dir, filename)
             os.remove(file_path)
             print(f"Deleted: {file_path}")
-        print(f"Deleted temporary files in ./tmp/data/{dir}")
+        print(f"Deleted temporary files in ./tmp/data/{dir}\n")
     return
