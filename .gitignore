@@ -174,3 +174,6 @@ eval_ews/
 eval_pss/
 best_model.pth
 ens_results/
+model_cloud.py
+tmp/weights/
+tmp/logs/
