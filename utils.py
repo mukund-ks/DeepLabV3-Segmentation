@@ -144,3 +144,19 @@ def saveResults(img: np.ndarray, mask: np.ndarray, y_pred: np.ndarray, save_img_
     cv2.imwrite(save_img_path, imgs)
 
     return
+
+
+def tmp_cleanup() -> None:
+    """Utility function for ens_train.py to delete temporary images and masks.
+    """
+    for dir in os.listdir("./tmp/data"):
+        if not os.path.isdir(os.path.join("./tmp/data", dir)):
+            continue
+        for filename in os.listdir(os.path.join("./tmp/data", dir)):
+            if not filename.startswith("tmp") and not filename.endswith(".png"):
+                continue
+            file_path = os.path.join("./tmp/data", dir, filename)
+            os.remove(file_path)
+            print(f"Deleted: {file_path}")
+        print(f"Deleted temporary files in ./tmp/data/{dir}")
+    return
