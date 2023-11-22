@@ -153,7 +153,7 @@ def tmp_cleanup() -> None:
         if not os.path.isdir(os.path.join("./tmp/data", dir)):
             continue
         for filename in os.listdir(os.path.join("./tmp/data", dir)):
-            if not filename.startswith("tmp") and not filename.endswith(".png"):
+            if not (filename.startswith("tmp") and filename.endswith(".png")):
                 continue
             file_path = os.path.join("./tmp/data", dir, filename)
             os.remove(file_path)
