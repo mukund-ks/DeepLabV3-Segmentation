@@ -60,6 +60,12 @@ from keras.metrics import Recall, Precision, Accuracy
     default=0.05,
     help="Scaling factor for IoU threshold. Defaults to 0.05.",
 )
+@click.option(
+    "--clean",
+    type=bool,
+    default=True,
+    help="Opt-in for cleaning up temporary images and masks after training. Defaults to True.",
+)
 def ens_trainer(
     n_models: int,
     epochs: int,
@@ -68,6 +74,7 @@ def ens_trainer(
     iou_threshold: float,
     max_threshold: float,
     scale_factor: float,
+    clean: bool,
 ) -> None:
     """Ensemble Trainer script for DeepLabV3+ Model with ResNet50 backbone. The script trains a specified number of models, loads previous model's weights into subsequent models and keeps track of poor performing examples in the validation dataset (through IoU Threshold). Learning Rate and IoU Threshold are adjusted for each model during loop.
 
@@ -79,6 +86,7 @@ def ens_trainer(
         iou_threshold (float): Starting threshold for IoU
         max_threshold (float): Maximum threshold for IoU
         scale_factor (float): Scaling factor for IoU threshold
+        clean (bool): Cleanup temporary images and masks after training.
 
     Raises:
         OSError: In case Data Path (./tmp/data) does not exist.
@@ -149,8 +157,9 @@ def ens_trainer(
         iou_threshold = round(min(iou_threshold + scale_factor, max_threshold), 2)
 
     click.secho("Ensemble Training Done!", fg="green")
-    click.secho("\nRunning cleanup!\n", fg="blue")
-    tmp_cleanup()
+    if clean:
+        click.secho("\nRunning cleanup!\n", fg="blue")
+        tmp_cleanup()
     return
 
 
