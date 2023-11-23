@@ -146,7 +146,7 @@ def ens_trainer(
         click.secho(f"Training Model_{model_idx}....\n", fg="blue")
         model.fit(train_dataset, epochs=epochs, validation_data=val_dataset, callbacks=callbacks)
 
-        iou_threshold = min(iou_threshold + scale_factor, max_threshold)
+        iou_threshold = round(min(iou_threshold + scale_factor, max_threshold), 2)
 
     click.secho("Ensemble Training Done!", fg="green")
     click.secho("\nRunning cleanup!\n", fg="blue")
