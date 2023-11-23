@@ -56,7 +56,7 @@
 - Introduced a custom callback to monitor IoU during training and save examples with IoU below a specified threshold.
 - Implemented a dynamic learning rate reduction for subsequent models during ensemble training.
 - Added a mechanism to scale the IoU threshold with each subsequent model, providing better adaptability.
-- Added scripts for cleaning up temporary files.
+- Added function for cleaning up temporary files.
 
 > [!NOTE]
 > See [`ens_train.py`](https://github.com/mukund-ks/DeepLabV3-Segmentation/blob/main/ens_train.py) and [`ens_eval.py`](https://github.com/mukund-ks/DeepLabV3-Segmentation/blob/main/ens_eval.py)
