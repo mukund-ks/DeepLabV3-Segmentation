@@ -29,7 +29,10 @@ STD = [0.229, 0.224, 0.225]
     help="Directory containing data for evaluation",
 )
 @click.option(
-    "--weights-dir", type=str, default="./tmp/weights", help="Directory containing data for evaluation"
+    "--weights-dir",
+    type=str,
+    default="./tmp/weights",
+    help="Directory containing data for evaluation",
 )
 def ens_eval(data_dir: str, weights_dir: str) -> None:
     """Evaluation script to test models trained in ensemble mode. Find results in 'ens_results' directory.
@@ -46,7 +49,7 @@ def ens_eval(data_dir: str, weights_dir: str) -> None:
     all_files = os.listdir(weights_dir)
 
     model_files = [file for file in all_files if file.startswith("model_") and file.endswith(".h5")]
-    
+
     if not len(model_files):
         raise OSError(f"No weights in weights directory, {weights_dir}")
 
@@ -151,5 +154,6 @@ def ens_eval(data_dir: str, weights_dir: str) -> None:
     df.to_csv("./ens_results/Evaluation_Score.csv")
     return
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     ens_eval()
