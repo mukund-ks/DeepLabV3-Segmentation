@@ -29,7 +29,7 @@ STD = [0.229, 0.224, 0.225]
     help="Directory containing data for evaluation",
 )
 @click.option(
-    "--data-dir", type=str, default="./tmp/weights", help="Directory containing data for evaluation"
+    "--weights-dir", type=str, default="./tmp/weights", help="Directory containing data for evaluation"
 )
 def ens_eval(data_dir: str, weights_dir: str) -> None:
     """Evaluation script to test models trained in ensemble mode. Find results in 'ens_results' directory.
@@ -60,9 +60,9 @@ def ens_eval(data_dir: str, weights_dir: str) -> None:
         model_name = m.split(".")[0]
         model_preds = []
 
-        print(f"Test:\nImages: {len(x_test)}\tMasks: {len(y_test)}")
+        click.secho(f"\nEval Images: {len(x_test)}\nEval Masks: {len(y_test)}\n", fg="blue")
 
-        print(f"Testing {model_name}...")
+        click.secho(f"Testing {model_name}...\n", fg="green")
         for x in tqdm(x_test, total=len(x_test)):
             image = cv2.imread(x, cv2.IMREAD_COLOR)
             image_resized = cv2.resize(image, dsize=(256, 256))
@@ -82,10 +82,10 @@ def ens_eval(data_dir: str, weights_dir: str) -> None:
 
     preds = np.array(preds)
     avg_result = np.mean(preds, axis=0)
+    avg_result_binary = (avg_result > 0).astype(np.int32)
 
     SCORE = []
-    for x, y, pred in zip(x_test, y_test, avg_result):
-        print(pred.shape)
+    for x, y, pred in zip(x_test, y_test, avg_result_binary):
         name = os.path.split(x)[1].split(".")[0]
 
         image = cv2.imread(x, cv2.IMREAD_COLOR)
@@ -150,3 +150,6 @@ def ens_eval(data_dir: str, weights_dir: str) -> None:
     )
     df.to_csv("./ens_results/Evaluation_Score.csv")
     return
+
+if __name__=="__main__":
+    ens_eval()

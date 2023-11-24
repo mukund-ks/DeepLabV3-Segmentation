@@ -74,8 +74,7 @@ def evaluator(eval_dir: str) -> None:
 
         y_pred = model.predict(x)[0]
         y_pred = np.squeeze(y_pred, axis=-1)
-        y_pred = y_pred > 0.5
-        y_pred = y_pred.astype(np.int32)
+        y_pred = (y_pred > 0).astype(np.int32)
 
         diagonal_len, horizontal_len, vertical_len = getMaskLen(y_pred)
 
