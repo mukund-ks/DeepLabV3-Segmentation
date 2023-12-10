@@ -76,8 +76,6 @@ def ens_eval(data_dir: str, weights_dir: str) -> None:
 
             y_pred = model.predict(x)[0]
             y_pred = np.squeeze(y_pred, axis=-1)
-            y_pred = y_pred > 0.5
-            y_pred = y_pred.astype(np.int32)
 
             model_preds.append(y_pred)
 
@@ -85,7 +83,7 @@ def ens_eval(data_dir: str, weights_dir: str) -> None:
 
     preds = np.array(preds)
     avg_result = np.mean(preds, axis=0)
-    avg_result_binary = (avg_result > 0).astype(np.int32)
+    avg_result_binary = (avg_result > 0.5).astype(np.int32)
 
     SCORE = []
     for x, y, pred in zip(x_test, y_test, avg_result_binary):
