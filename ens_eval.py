@@ -56,6 +56,7 @@ def ens_eval(data_dir: str, weights_dir: str) -> None:
     x_test, y_test = loadData(data_dir)
 
     preds = []
+    click.secho(f"\nNo. of Models: {len(model_files)}\n", fg="blue")
     for m in model_files:
         model = createModel("ResNet50")
         model.load_weights(os.path.join(weights_dir, m))
