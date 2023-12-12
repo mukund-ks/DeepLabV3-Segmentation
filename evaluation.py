@@ -10,7 +10,7 @@ from tqdm import tqdm
 import tensorflow as tf
 from keras.utils import CustomObjectScope
 from keras.models import load_model
-from metrics import (
+from src.metrics import (
     iou as model_iou,
     calc_loss,
     dice_coef,
@@ -21,7 +21,7 @@ from metrics import (
     recall_score,
     f1_score,
 )
-from utils import loadData, createDir, getMaskLen, saveResults
+from src.utils import loadData, createDir, getMaskLen, saveResults
 
 H = 256
 W = 256

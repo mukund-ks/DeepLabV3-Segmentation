@@ -4,9 +4,8 @@ import click
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from model_cloud import createModel
-from utils import loadData
-from metrics import (
+from src.model_cloud import createModel
+from src.metrics import (
     eval_iou,
     eval_dice_coef,
     accuracy_score,
@@ -14,7 +13,7 @@ from metrics import (
     recall_score,
     f1_score,
 )
-from utils import saveResults, getMaskLen
+from src.utils import saveResults, getMaskLen, loadData
 
 MEAN = [0.485, 0.456, 0.406]
 STD = [0.229, 0.224, 0.225]

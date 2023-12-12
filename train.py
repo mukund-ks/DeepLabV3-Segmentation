@@ -15,9 +15,9 @@ from keras.callbacks import (
 )
 from keras.optimizers import Adam
 from keras.metrics import Recall, Precision, Accuracy
-from model import createModel
-from metrics import calc_loss, dice_coef, iou
-from utils import createDir, loadData, shuffling
+from src.model import createModel
+from src.metrics import calc_loss, dice_coef, iou
+from src.utils import createDir, loadData, shuffling
 from typing import Any
 
 H = 256

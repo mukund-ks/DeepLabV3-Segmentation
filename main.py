@@ -1,6 +1,6 @@
 import click
 from train import trainer
-from data_processing import processData
+from src.data_processing import processData
 from evaluation import evaluator
 import traceback
 

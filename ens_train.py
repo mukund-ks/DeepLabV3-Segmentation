@@ -1,11 +1,11 @@
 import os
 import click
 import tensorflow as tf
-from model import createModel
-from utils import splitData, shuffling, tmp_cleanup
+from src.model import createModel
+from src.utils import splitData, shuffling, tmp_cleanup
 from train import tf_dataset
-from metrics import calc_loss, dice_coef, iou
-from custom_callbacks import IoUThresholdCallback
+from src.metrics import calc_loss, dice_coef, iou
+from src.custom_callbacks import IoUThresholdCallback
 from keras.callbacks import (
     ModelCheckpoint,
     CSVLogger,
