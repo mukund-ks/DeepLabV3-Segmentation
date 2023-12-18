@@ -19,7 +19,7 @@ from keras.layers import (
     Dense,
 )
 from keras.models import Model
-from keras.applications import ResNet50, ResNet101
+from keras.applications import ResNet50, ResNet101, Xception
 from keras.regularizers import l2
 from tensorflow.python.keras.engine.keras_tensor import KerasTensor
 
@@ -121,15 +121,37 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
     """
     inputs = Input(shape)  # instantiating a tensor
 
-    encoder = (
-        ResNet101(weights="imagenet", include_top=False, input_tensor=inputs)
-        if modelType == "ResNet101"
-        else ResNet50(weights="imagenet", include_top=False, input_tensor=inputs)
-    )
+    model_mappings = {
+        "Xception": {
+            "base_model": Xception(weights="imagenet", include_top=False, input_tensor=inputs),
+            "block_name": "block13_sepconv2_act",
+            "low_level_name": "block4_sepconv1_act",
+        },
+        "ResNet101": {
+            "base_model": ResNet101(weights="imagenet", include_top=False, input_tensor=inputs),
+            "block_name": "conv4_block23_out",
+            "low_level_name": "conv2_block2_out",
+        },
+        "ResNet50": {
+            "base_model": ResNet50(weights="imagenet", include_top=False, input_tensor=inputs),
+            "block_name": "conv4_block6_out",
+            "low_level_name": "conv2_block2_out",
+        },
+    }
 
-    image_features = encoder.get_layer(
-        "conv4_block23_out" if modelType == "ResNet101" else "conv4_block6_out"
-    ).output
+    model_params = model_mappings.get(modelType, {})
+    base_model = model_params.get("base_model")
+    block_name = model_params.get("block_name")
+    low_level_name = model_params.get("low_level_name")
+
+    image_features = base_model.get_layer(block_name).output
+
+    if modelType == "Xception":
+        image_features = Conv2D(
+            1024, (1, 1), padding="same", kernel_initializer="he_normal", use_bias=False
+        )(image_features)
+        image_features = BatchNormalization()(image_features)
+        image_features = Activation("relu")(image_features)
 
     # High-Level Features
     x_a = ASPP(image_features)
@@ -138,7 +160,9 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
     x_a = Dropout(0.5)(x_a)
 
     # Low-Level Features
-    x_b = encoder.get_layer("conv2_block2_out").output
+    x_b = base_model.get_layer(low_level_name).output
+    if modelType == "Xception":
+        x_b = UpSampling2D((2, 2), interpolation="bilinear")(x_b)
 
     # 1x1 Convolution on Low-Level Features
     x_b = Conv2D(
@@ -180,5 +204,5 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
 
 
 if __name__ == "__main__":
-    model = createModel("ResNet50")
+    model = createModel("Xception")
     model.summary()
