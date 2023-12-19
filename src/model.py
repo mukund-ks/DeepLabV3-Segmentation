@@ -120,27 +120,37 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
         Model: Your DeepLabV3+ Model.
     """
     inputs = Input(shape)  # instantiating a tensor
+    
+    def get_xception():
+        return Xception(weights="imagenet", include_top=False, input_tensor=inputs)
+    
+    def get_resnet50():
+        return ResNet50(weights="imagenet", include_top=False, input_tensor=inputs)
+        
+    def get_resnet101():
+        return ResNet101(weights="imagenet", include_top=False, input_tensor=inputs)
 
     model_mappings = {
         "Xception": {
-            "base_model": Xception(weights="imagenet", include_top=False, input_tensor=inputs),
+            "base_model_func": get_xception,
             "block_name": "block13_sepconv2_act",
             "low_level_name": "block4_sepconv1_act",
         },
         "ResNet101": {
-            "base_model": ResNet101(weights="imagenet", include_top=False, input_tensor=inputs),
+            "base_model_func": get_resnet101,
             "block_name": "conv4_block23_out",
             "low_level_name": "conv2_block2_out",
         },
         "ResNet50": {
-            "base_model": ResNet50(weights="imagenet", include_top=False, input_tensor=inputs),
+            "base_model_func": get_resnet50,
             "block_name": "conv4_block6_out",
             "low_level_name": "conv2_block2_out",
         },
     }
 
     model_params = model_mappings.get(modelType, {})
-    base_model = model_params.get("base_model")
+    base_model_func = model_params.get("base_model_func")
+    base_model = base_model_func()
     block_name = model_params.get("block_name")
     low_level_name = model_params.get("low_level_name")
 
