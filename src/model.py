@@ -79,29 +79,39 @@ def ASPP(inputs: KerasTensor) -> KerasTensor:
     # y2 = Dropout(0.5)(y2)
     y2 = Activation("relu")(y2)
 
-    # 3x3 Convolution, Dilation Rate - 12 or 6
+    # 3x3 Convolution, Dilation Rate - 6
     y3 = Conv2D(
         256, 3, padding="same", dilation_rate=6, use_bias=False, kernel_initializer="he_normal"
     )(inputs)
     y3 = BatchNormalization()(y3)
     y3 = Activation("relu")(y3)
 
-    # 3x3 Convolution, Dilation Rate - 24 or 12
+    # 3x3 Convolution, Dilation Rate - 12
     y4 = Conv2D(
         256, 3, padding="same", dilation_rate=12, use_bias=False, kernel_initializer="he_normal"
     )(inputs)
     y4 = BatchNormalization()(y4)
     y4 = Activation("relu")(y4)
 
-    # 3x3 Convolution, Dilation Rate - 36 or 18
+    # 3x3 Convolution, Dilation Rate - 18
     y5 = Conv2D(
         256, 3, padding="same", dilation_rate=18, use_bias=False, kernel_initializer="he_normal"
     )(inputs)
     y5 = BatchNormalization()(y5)
     y5 = Activation("relu")(y5)
 
+    # 3x3 Convolution, Dilation Rate - 24    
+    y6 = Conv2D(256, 3, padding="same", dilation_rate=24, use_bias=False, kernel_initializer="he_normal")(inputs)
+    y6 = BatchNormalization()(y6)
+    y6 = Activation("relu")(y6)
+
+    # 3x3 Convolution, Dilation Rate - 36
+    y7 = Conv2D(256, 3, padding="same", dilation_rate=36, use_bias=False, kernel_initializer="he_normal")(inputs)
+    y7 = BatchNormalization()(y7)
+    y7 = Activation("relu")(y7)
+
     # 1x1 Convolution on the concatenated Feature Map
-    y = Concatenate()([y1, y2, y3, y4, y5])
+    y = Concatenate()([y1, y2, y3, y4, y5, y6, y7])
     y = Conv2D(256, 1, padding="same", use_bias=False, kernel_initializer="he_normal")(y)
     y = BatchNormalization()(y)
     y = Activation("relu")(y)
@@ -167,7 +177,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
     x_a = ASPP(image_features)
     # Up-Sampling High-Level Features by 4
     x_a = UpSampling2D((4, 4), interpolation="bilinear")(x_a)
-    x_a = Dropout(0.5)(x_a)
+    # x_a = Dropout(0.5)(x_a)
 
     # Low-Level Features
     x_b = base_model.get_layer(low_level_name).output
@@ -180,11 +190,11 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
     )(x_b)
     x_b = BatchNormalization()(x_b)
     x_b = Activation("relu")(x_b)
+    x = squeeze_and_excite(x)
 
     # Concatenating High-Level and Low-Level Features
     x = Concatenate()([x_a, x_b])
-    x = Dropout(0.5)(x)
-    # x = squeeze_and_excite(x)
+    # x = Dropout(0.5)(x)
 
     # 3x3 Convolution on Concatenated Map
     x = Conv2D(
