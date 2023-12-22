@@ -190,7 +190,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
     )(x_b)
     x_b = BatchNormalization()(x_b)
     x_b = Activation("relu")(x_b)
-    x = squeeze_and_excite(x)
+    x_b = squeeze_and_excite(x_b)
 
     # Concatenating High-Level and Low-Level Features
     x = Concatenate()([x_a, x_b])
