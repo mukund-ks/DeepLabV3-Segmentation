@@ -63,7 +63,7 @@
 > See [`ens_train.py`](https://github.com/mukund-ks/DeepLabV3-Segmentation/blob/main/ens_train.py) and [`ens_eval.py`](https://github.com/mukund-ks/DeepLabV3-Segmentation/blob/main/ens_eval.py)
 
 ### More Backbones - 23/12/2023
-- Added backbone implementation for Xception and EfficientNetB2. (ef93d12, a2a5ce6)
+- Added backbone implementation for Xception and EfficientNetB2. ([`ef93d12`](https://github.com/mukund-ks/DeepLabV3-Segmentation/commit/ef93d12e7516da75b272c56ea14e289dd2fd60f9), [`a2a5ce6`](https://github.com/mukund-ks/DeepLabV3-Segmentation/commit/a2a5ce68df3643f6958c51f9bb75fbf986de997f))
 - Removed 'cloud' branch.
 - Updated the model on 'main' to the best performing configuration.
 
