@@ -72,12 +72,14 @@ def ASPP(inputs: KerasTensor) -> KerasTensor:
     y1 = BatchNormalization()(y1)
     y1 = Activation("relu")(y1)
     y1 = UpSampling2D((shape[1], shape[2]), interpolation="bilinear")(y1)
+    y1 = squeeze_and_excite(y1)
 
     # 1x1 Convolution
     y2 = Conv2D(256, 1, padding="same", use_bias=False, kernel_initializer="he_normal")(inputs)
     y2 = BatchNormalization()(y2)
     # y2 = Dropout(0.5)(y2)
     y2 = Activation("relu")(y2)
+    y2 = squeeze_and_excite(y2)
 
     # 3x3 Convolution, Dilation Rate - 6
     y3 = Conv2D(
@@ -85,6 +87,7 @@ def ASPP(inputs: KerasTensor) -> KerasTensor:
     )(inputs)
     y3 = BatchNormalization()(y3)
     y3 = Activation("relu")(y3)
+    y3 = squeeze_and_excite(y3)
 
     # 3x3 Convolution, Dilation Rate - 12
     y4 = Conv2D(
@@ -92,6 +95,7 @@ def ASPP(inputs: KerasTensor) -> KerasTensor:
     )(inputs)
     y4 = BatchNormalization()(y4)
     y4 = Activation("relu")(y4)
+    y4 = squeeze_and_excite(y4)
 
     # 3x3 Convolution, Dilation Rate - 18
     y5 = Conv2D(
@@ -99,22 +103,30 @@ def ASPP(inputs: KerasTensor) -> KerasTensor:
     )(inputs)
     y5 = BatchNormalization()(y5)
     y5 = Activation("relu")(y5)
+    y5 = squeeze_and_excite(y5)
 
-    # 3x3 Convolution, Dilation Rate - 24    
-    y6 = Conv2D(256, 3, padding="same", dilation_rate=24, use_bias=False, kernel_initializer="he_normal")(inputs)
+    # 3x3 Convolution, Dilation Rate - 24
+    y6 = Conv2D(
+        256, 3, padding="same", dilation_rate=24, use_bias=False, kernel_initializer="he_normal"
+    )(inputs)
     y6 = BatchNormalization()(y6)
     y6 = Activation("relu")(y6)
+    y6 = squeeze_and_excite(y6)
 
     # 3x3 Convolution, Dilation Rate - 36
-    y7 = Conv2D(256, 3, padding="same", dilation_rate=36, use_bias=False, kernel_initializer="he_normal")(inputs)
+    y7 = Conv2D(
+        256, 3, padding="same", dilation_rate=36, use_bias=False, kernel_initializer="he_normal"
+    )(inputs)
     y7 = BatchNormalization()(y7)
     y7 = Activation("relu")(y7)
+    y7 = squeeze_and_excite(y7)
 
     # 1x1 Convolution on the concatenated Feature Map
     y = Concatenate()([y1, y2, y3, y4, y5, y6, y7])
     y = Conv2D(256, 1, padding="same", use_bias=False, kernel_initializer="he_normal")(y)
     y = BatchNormalization()(y)
     y = Activation("relu")(y)
+    y = squeeze_and_excite(y)
 
     return y
 
@@ -130,13 +142,13 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
         Model: Your DeepLabV3+ Model.
     """
     inputs = Input(shape)  # instantiating a tensor
-    
+
     def get_xception():
         return Xception(weights="imagenet", include_top=False, input_tensor=inputs)
-    
+
     def get_resnet50():
         return ResNet50(weights="imagenet", include_top=False, input_tensor=inputs)
-        
+
     def get_resnet101():
         return ResNet101(weights="imagenet", include_top=False, input_tensor=inputs)
 
@@ -175,6 +187,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
 
     # High-Level Features
     x_a = ASPP(image_features)
+
     # Up-Sampling High-Level Features by 4
     x_a = UpSampling2D((4, 4), interpolation="bilinear")(x_a)
     # x_a = Dropout(0.5)(x_a)

@@ -178,3 +178,4 @@ model_cloud.py
 tmp/weights/
 tmp/logs/
 eval_bms/
+test.py

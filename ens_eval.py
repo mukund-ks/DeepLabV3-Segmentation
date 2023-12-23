@@ -4,7 +4,7 @@ import click
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from src.model_cloud import createModel
+from src.model import createModel
 from src.metrics import (
     eval_iou,
     eval_dice_coef,
