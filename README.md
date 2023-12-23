@@ -3,7 +3,7 @@
   <h3 align="center">DeepLabV3-Segmentation</h3>
 
   <p align="center">
-    A DeepLab V3+ Model with ResNet 50 / ResNet101 Encoder to perform Binary Segmentation Tasks. 
+    A DeepLab V3+ Model with a choice of Encoder to perform Binary Segmentation Tasks.
     <br/>
     <br/>
     <a href="https://github.com/mukund-ks/DeepLabV3-Segmentation/issues">Report Bug</a>
@@ -19,6 +19,7 @@
 - [Table Of Contents](#table-of-contents)
 - [Changelog](#changelog)
   - [Ensemble Training \& Evaluation - 22/11/2023](#ensemble-training--evaluation---22112023)
+  - [More Backbones - 23/12/2023](#more-backbones---23122023)
 - [About The Project](#about-the-project)
 - [Working](#working)
   - [DeepLabV3+](#deeplabv3)
@@ -60,6 +61,11 @@
 
 > [!NOTE]
 > See [`ens_train.py`](https://github.com/mukund-ks/DeepLabV3-Segmentation/blob/main/ens_train.py) and [`ens_eval.py`](https://github.com/mukund-ks/DeepLabV3-Segmentation/blob/main/ens_eval.py)
+
+### More Backbones - 23/12/2023
+- Added backbone implementation for Xception and EfficientNetB2. (ef93d12, a2a5ce6)
+- Removed 'cloud' branch.
+- Updated the model on 'main' to the best performing configuration.
 
 ## About The Project
 
