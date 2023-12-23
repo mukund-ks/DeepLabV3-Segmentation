@@ -19,7 +19,7 @@ from keras.layers import (
     Dense,
 )
 from keras.models import Model
-from keras.applications import ResNet50, ResNet101, Xception
+from keras.applications import ResNet50, ResNet101, Xception, EfficientNetB2
 from keras.regularizers import l2
 from tensorflow.python.keras.engine.keras_tensor import KerasTensor
 
@@ -146,6 +146,9 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
     def get_xception():
         return Xception(weights="imagenet", include_top=False, input_tensor=inputs)
 
+    def get_efficientb2():
+        return EfficientNetB2(weights="imagenet", include_top=False, input_tensor=inputs)
+
     def get_resnet50():
         return ResNet50(weights="imagenet", include_top=False, input_tensor=inputs)
 
@@ -157,6 +160,11 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
             "base_model_func": get_xception,
             "block_name": "block13_sepconv2_act",
             "low_level_name": "block4_sepconv1_act",
+        },
+        "EfficientNetB2": {
+            "base_model_func": get_efficientb2,
+            "block_name": "block7b_activation",
+            "low_level_name": "block2c_activation",
         },
         "ResNet101": {
             "base_model_func": get_resnet101,
@@ -185,6 +193,14 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
         image_features = BatchNormalization()(image_features)
         image_features = Activation("relu")(image_features)
 
+    if modelType == "EfficientNetB2":
+        image_features = UpSampling2D((2, 2), interpolation="bilinear")(image_features)
+        image_features = Conv2D(
+            1024, (1, 1), padding="same", kernel_initializer="he_normal", use_bias=False
+        )(image_features)
+        image_features = BatchNormalization()(image_features)
+        image_features = Activation("relu")(image_features)
+
     # High-Level Features
     x_a = ASPP(image_features)
 
@@ -196,6 +212,10 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
     x_b = base_model.get_layer(low_level_name).output
     if modelType == "Xception":
         x_b = UpSampling2D((2, 2), interpolation="bilinear")(x_b)
+    if modelType == "EfficientNetB2":
+        x_b = Conv2D(256, (1, 1), padding="same", kernel_initializer="he_normal", use_bias=False)(
+            x_b
+        )
 
     # 1x1 Convolution on Low-Level Features
     x_b = Conv2D(
@@ -237,5 +257,5 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
 
 
 if __name__ == "__main__":
-    model = createModel("Xception")
+    model = createModel("EfficientNetB2")
     model.summary()
