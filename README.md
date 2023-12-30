@@ -63,7 +63,7 @@
 > See [`ens_train.py`](https://github.com/mukund-ks/DeepLabV3-Segmentation/blob/main/ens_train.py) and [`ens_eval.py`](https://github.com/mukund-ks/DeepLabV3-Segmentation/blob/main/ens_eval.py)
 
 ### More Backbones - 23/12/2023
-- Added backbone implementation for Xception and EfficientNetB2. ([`ef93d12`](https://github.com/mukund-ks/DeepLabV3-Segmentation/commit/ef93d12e7516da75b272c56ea14e289dd2fd60f9), [`a2a5ce6`](https://github.com/mukund-ks/DeepLabV3-Segmentation/commit/a2a5ce68df3643f6958c51f9bb75fbf986de997f))
+- Added backbone implementation for Xception and EfficientNetB5. ([`ef93d12`](https://github.com/mukund-ks/DeepLabV3-Segmentation/commit/ef93d12e7516da75b272c56ea14e289dd2fd60f9), [`2307d8c`](https://github.com/mukund-ks/DeepLabV3-Segmentation/commit/2307d8c6d7350081fd52319497c8a7b1f1e8d93f))
 - Removed 'cloud' branch.
 - Updated the model on 'main' to the best performing configuration.
 
@@ -252,7 +252,7 @@ Results can be found below.
 | :-------------------------------------------------------------------------------------------------------------: |
 | *A1+A2+A4 Result - ResNet101* <br> *Left to Right: Input Image, Ground Truth, Predicted Mask, Segmented Output* |
 
-> **Note**
+> [!NOTE]
 > Data Augmentations were used for all training sets except A4.
 
 ### PSS
@@ -356,7 +356,7 @@ env/Scripts/activate
 pip install -r requirements.txt
 ```
 
-> **Note**
+> [!NOTE]
 > You can deactivate the Virtual Environment by using
 > ```env/Scripts/deactivate```
 
@@ -449,7 +449,7 @@ $ tree -L 3
 ```
 * The structure of `eval_data` remains the same in both cases, holding `Image` and `Mask` sub-directories.
 
-> **Note**
+> [!NOTE]
 > The directory names are case-sensitive.
 ## Roadmap
 
