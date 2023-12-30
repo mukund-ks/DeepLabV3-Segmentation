@@ -19,7 +19,7 @@ from keras.layers import (
     Dense,
 )
 from keras.models import Model
-from keras.applications import ResNet50, ResNet101, Xception, EfficientNetB2
+from keras.applications import ResNet50, ResNet101, Xception, EfficientNetB5
 from keras.regularizers import l2
 from tensorflow.python.keras.engine.keras_tensor import KerasTensor
 
@@ -135,7 +135,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
     """Creates a Model with the specified backbone.
 
     Args:
-        modelType (str): Choice of backbone. ResNet50 or ResNet101.
+        modelType (str): Choice of backbone. ResNet50, ResNet101, Xception or EfficientNetB5.
         shape (tuple[int]): Shape of input to the model. Defaults to (256, 256, 3).
 
     Returns:
@@ -146,8 +146,8 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
     def get_xception():
         return Xception(weights="imagenet", include_top=False, input_tensor=inputs)
 
-    def get_efficientb2():
-        return EfficientNetB2(weights="imagenet", include_top=False, input_tensor=inputs)
+    def get_efficientb5():
+        return EfficientNetB5(weights="imagenet", include_top=False, input_tensor=inputs)
 
     def get_resnet50():
         return ResNet50(weights="imagenet", include_top=False, input_tensor=inputs)
@@ -161,10 +161,10 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
             "block_name": "block13_sepconv2_act",
             "low_level_name": "block4_sepconv1_act",
         },
-        "EfficientNetB2": {
-            "base_model_func": get_efficientb2,
-            "block_name": "block7b_activation",
-            "low_level_name": "block2c_activation",
+        "EfficientNetB5": {
+            "base_model_func": get_efficientb5,
+            "block_name": "block7c_activation",
+            "low_level_name": "block2e_activation",
         },
         "ResNet101": {
             "base_model_func": get_resnet101,
@@ -193,7 +193,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
         image_features = BatchNormalization()(image_features)
         image_features = Activation("relu")(image_features)
 
-    if modelType == "EfficientNetB2":
+    if modelType == "EfficientNetB5":
         image_features = UpSampling2D((2, 2), interpolation="bilinear")(image_features)
         image_features = Conv2D(
             1024, (1, 1), padding="same", kernel_initializer="he_normal", use_bias=False
@@ -212,7 +212,7 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
     x_b = base_model.get_layer(low_level_name).output
     if modelType == "Xception":
         x_b = UpSampling2D((2, 2), interpolation="bilinear")(x_b)
-    if modelType == "EfficientNetB2":
+    if modelType == "EfficientNetB5":
         x_b = Conv2D(256, (1, 1), padding="same", kernel_initializer="he_normal", use_bias=False)(
             x_b
         )
@@ -257,5 +257,5 @@ def createModel(modelType: str, shape: tuple[int] = (256, 256, 3)) -> Model:
 
 
 if __name__ == "__main__":
-    model = createModel("EfficientNetB2")
+    model = createModel("EfficientNetB5")
     model.summary()
