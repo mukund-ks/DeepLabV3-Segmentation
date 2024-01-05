@@ -24,7 +24,7 @@ import traceback
     "-M",
     "--model-type",
     prompt="Model Type",
-    type=click.Choice(["ResNet101", "ResNet50","Xception"], case_sensitive=True),
+    type=click.Choice(["ResNet101", "ResNet50","Xception", "EfficientNetB5"], case_sensitive=True),
     required=True,
     help="Choice of Encoder.",
 )
@@ -73,7 +73,7 @@ def main(
     model_type: str,
 ) -> None:
     """
-    A DeepLab V3+ Decoder based Binary Segmentation Model with choice of Encoders b/w ResNet101, ResNet50 or Xception.\n
+    A DeepLab V3+ Decoder based Binary Segmentation Model with choice of Encoders b/w ResNet101, ResNet50, Xception or EfficientNetB5.\n
     Please make sure that your data is structured according to the folder structure specified in the Github Repository.\n
     See: https://github.com/mukund-ks/DeepLabV3-Segmentation
     """
