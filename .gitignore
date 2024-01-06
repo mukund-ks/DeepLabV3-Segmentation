@@ -180,3 +180,4 @@ tmp/logs/
 eval_bms/
 test.py
 test.txt
+eval_bdd/
