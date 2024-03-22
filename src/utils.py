@@ -1,10 +1,11 @@
 import os
-import numpy as np
-import cv2
 from glob import glob
-from sklearn.utils import shuffle
+from typing import Union
+
+import cv2
+import numpy as np
 from sklearn.model_selection import train_test_split
-from typing import Any, Union
+from sklearn.utils import shuffle
 
 H = 256
 W = 256
@@ -147,8 +148,7 @@ def saveResults(img: np.ndarray, mask: np.ndarray, y_pred: np.ndarray, save_img_
 
 
 def tmp_cleanup() -> None:
-    """Utility function for ens_train.py to delete temporary images and masks.
-    """
+    """Utility function for ens_train.py to delete temporary images and masks."""
     for dir in os.listdir("./tmp/data"):
         if not os.path.isdir(os.path.join("./tmp/data", dir)):
             continue

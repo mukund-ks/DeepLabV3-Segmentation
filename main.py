@@ -1,8 +1,10 @@
-import click
-from train import trainer
-from src.data_processing import processData
-from evaluation import evaluator
 import traceback
+
+import click
+
+from evaluation import evaluator
+from src.data_processing import processData
+from train import trainer
 
 
 @click.command()
@@ -24,7 +26,7 @@ import traceback
     "-M",
     "--model-type",
     prompt="Model Type",
-    type=click.Choice(["ResNet101", "ResNet50","Xception", "EfficientNetB5"], case_sensitive=True),
+    type=click.Choice(["ResNet101", "ResNet50", "Xception", "EfficientNetB5"], case_sensitive=True),
     required=True,
     help="Choice of Encoder.",
 )
@@ -82,7 +84,7 @@ def main(
         processData(data_dir=data_dir, augmentation=augmentation, split_data=split_data)
         click.echo(f"\nTraining Phase\n{'-'*10}")
         trainer(
-            stop_early = stop_early,
+            stop_early=stop_early,
             batches=batch_size,
             epochs=epochs,
             modelType=model_type,

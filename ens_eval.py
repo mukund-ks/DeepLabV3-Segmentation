@@ -1,19 +1,21 @@
 import os
-import cv2
+
 import click
+import cv2
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from src.model import createModel
+
 from src.metrics import (
-    eval_iou,
-    eval_dice_coef,
     accuracy_score,
+    eval_dice_coef,
+    eval_iou,
+    f1_score,
     precision_score,
     recall_score,
-    f1_score,
 )
-from src.utils import saveResults, getMaskLen, loadData
+from src.model import createModel
+from src.utils import getMaskLen, loadData, saveResults
 
 MEAN = [0.485, 0.456, 0.406]
 STD = [0.229, 0.224, 0.225]

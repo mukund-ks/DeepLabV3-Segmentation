@@ -1,6 +1,7 @@
+import os
+
 import cv2
 import numpy as np
-import os
 from keras.callbacks import Callback
 from metrics import eval_iou
 

@@ -1,24 +1,25 @@
 import os
+from typing import Any
+
+import cv2
+import numpy as np
+import tensorflow as tf
+from keras.callbacks import (
+    CSVLogger,
+    EarlyStopping,
+    ModelCheckpoint,
+    ReduceLROnPlateau,
+    TensorBoard,
+)
+from keras.metrics import Accuracy, Precision, Recall
+from keras.optimizers import Adam
+
+from src.metrics import calc_loss, dice_coef, iou
+from src.model import createModel
+from src.utils import createDir, loadData, shuffling
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
-
-import numpy as np
-import cv2
-import tensorflow as tf
-from keras.callbacks import (
-    ModelCheckpoint,
-    CSVLogger,
-    ReduceLROnPlateau,
-    EarlyStopping,
-    TensorBoard,
-)
-from keras.optimizers import Adam
-from keras.metrics import Recall, Precision, Accuracy
-from src.model import createModel
-from src.metrics import calc_loss, dice_coef, iou
-from src.utils import createDir, loadData, shuffling
-from typing import Any
 
 H = 256
 W = 256

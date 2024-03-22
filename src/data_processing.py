@@ -1,16 +1,18 @@
 import os
-import numpy as np
+
 import cv2
-from tqdm import tqdm
+import numpy as np
 from albumentations import (
-    HorizontalFlip,
-    VerticalFlip,
     ChannelShuffle,
+    HorizontalFlip,
+    RandomBrightnessContrast,
     RandomSizedCrop,
     Rotate,
-    RandomBrightnessContrast,
+    VerticalFlip,
 )
-from utils import loadData, splitData, createDirs
+from tqdm import tqdm
+from utils import createDirs, loadData, splitData
+
 
 def augment_data(images: list, masks: list, save_path: str, augment: bool) -> None:
     """Function to apply augmentions and/or resize images to specific dimensions.

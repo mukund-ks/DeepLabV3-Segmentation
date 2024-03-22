@@ -1,27 +1,26 @@
 import os
 
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
-os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
-
+from keras.applications import EfficientNetB5, ResNet50, ResNet101, Xception
 from keras.layers import (
-    Conv2D,
-    BatchNormalization,
     Activation,
-    Concatenate,
-    Input,
-    Dropout,
-)
-from keras.layers import (
     AveragePooling2D,
-    GlobalAveragePooling2D,
-    UpSampling2D,
-    Reshape,
+    BatchNormalization,
+    Concatenate,
+    Conv2D,
     Dense,
+    # Dropout,
+    GlobalAveragePooling2D,
+    Input,
+    Reshape,
+    UpSampling2D,
 )
 from keras.models import Model
-from keras.applications import ResNet50, ResNet101, Xception, EfficientNetB5
-from keras.regularizers import l2
+
+# from keras.regularizers import l2
 from tensorflow.python.keras.engine.keras_tensor import KerasTensor
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 
 
 def squeeze_and_excite(inputs: KerasTensor, ratio: int = 8) -> KerasTensor:
